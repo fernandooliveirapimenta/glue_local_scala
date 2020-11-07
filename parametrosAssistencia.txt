@@ -18,5 +18,6 @@
 --redis_ssl="true"
 --redshift_schema="spectrum_assistencia_db_ab_mobile"
 --type="increment"
+--database="ab"
 
 spectrum_ultron_apolice

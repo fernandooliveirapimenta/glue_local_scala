@@ -1,35 +1,26 @@
-package com.brasilseg.etl.scripts.bb30.datalake
-
-import com.amazonaws.services.glue.GlueContext
-import com.amazonaws.services.glue.util.GlueArgParser
-import com.amazonaws.services.glue.util.Job
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
-import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
-import com.amazonaws.client.builder.AwsClientBuilder
-import com.amazonaws.services.secretsmanager._
-import com.amazonaws.services.secretsmanager.model._
-
-import redis.clients.jedis.{Jedis, Transaction}
-
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.SparkSession
-
-import org.json4s._
-import org.json4s.jackson.Serialization.write
-
-import scala.collection.JavaConverters._
-import scala.util.parsing.json.JSON
+package etlfinal
 
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicLong
 
+import com.amazonaws.client.builder.AwsClientBuilder
+import com.amazonaws.services.glue.GlueContext
+import com.amazonaws.services.glue.util.{GlueArgParser, Job}
+import com.amazonaws.services.secretsmanager._
+import com.amazonaws.services.secretsmanager.model._
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
+import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.{SparkConf, SparkContext}
+import org.json4s._
+import org.json4s.jackson.Serialization.write
+import redis.clients.jedis.{Jedis, Transaction}
+
+import scala.collection.JavaConverters._
 import scala.com.brasilseg.entity.entityMain
+import scala.util.parsing.json.JSON
 
-  object GlueApp{
-  
-  var nomeChave = "plano_assistencia_id"
-
-  var nomeChavePlanoTop = "plano_assistencia_top-residencial"
+object GlueApp {
 
   val BLOCK_PARTITION = 10000
 
@@ -67,24 +58,24 @@ import scala.com.brasilseg.entity.entityMain
   }
 
   def obterCredenciais(redshift_credentials: String): String = {
-      
+
     val secretName: String = redshift_credentials
     val endpoint: String = "secretsmanager.us-east-1.amazonaws.com"
     val region: String = "us-east-1"
     val config: AwsClientBuilder.EndpointConfiguration =
-    new AwsClientBuilder.EndpointConfiguration(endpoint, region)
+      new AwsClientBuilder.EndpointConfiguration(endpoint, region)
     val clientBuilder: AWSSecretsManagerClientBuilder =
-    AWSSecretsManagerClientBuilder.standard()
+      AWSSecretsManagerClientBuilder.standard()
     clientBuilder.setEndpointConfiguration(config)
     val client: AWSSecretsManager = clientBuilder.build()
     var secret: String = null
     var binarySecretData: ByteBuffer = null
     val getSecretValueRequest: GetSecretValueRequest =
-    new GetSecretValueRequest()
-      .withSecretId(secretName)
-      .withVersionStage("AWSCURRENT")
+      new GetSecretValueRequest()
+        .withSecretId(secretName)
+        .withVersionStage("AWSCURRENT")
     var getSecretValueResult: GetSecretValueResult = null
-    
+
     try getSecretValueResult = client.getSecretValue(getSecretValueRequest)
     catch {
       case e: ResourceNotFoundException =>
@@ -96,15 +87,15 @@ import scala.com.brasilseg.entity.entityMain
       case e: InvalidParameterException =>
         logger.error("The request had invalid params: " + e.getMessage)
     }
-    
+
     if (getSecretValueResult.getSecretString != null) {
-        secret = getSecretValueResult.getSecretString
-        return secret
+      secret = getSecretValueResult.getSecretString
+      return secret
     } else {
-        binarySecretData = getSecretValueResult.getSecretBinary
-        return binarySecretData.toString
+      binarySecretData = getSecretValueResult.getSecretBinary
+      return binarySecretData.toString
     }
-          
+
   }
 
   def setRedis(transaction: Transaction, key: String, value: String) = {
@@ -154,14 +145,14 @@ import scala.com.brasilseg.entity.entityMain
 
   def main(sysArgs: Array[String]) {
 
-    args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redshift_key_path", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries").toArray)
+    args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries", "database").toArray)
 
     val sc: SparkContext = initializeSparkContext
     val glueContext: GlueContext = new GlueContext(sc)
     val spark: SparkSession = glueContext.getSparkSession
 
     Job.init(args("JOB_NAME"), glueContext, args.asJava)
-    
+
     val jsonSchema = scala.io.Source.fromFile(args("schema")).mkString
 
     val estrutura = JSON.parseFull(jsonSchema).getOrElse(Map()).asInstanceOf[Map[String,Map[String,Map[String,List[String]]]]]
@@ -175,19 +166,29 @@ import scala.com.brasilseg.entity.entityMain
     import spark.implicits._
     implicit val formats = DefaultFormats
 
+    val chaveForteSegbr = "plano_assistencia_id"
+    val chaveForteUltron = "id_oferta_plano"
+    var chaveForteFinal = chaveForteSegbr;
+
+    var nomeChave = "plano_assistencia_id"
+    var nomeChavePlanoTop = "plano_assistencia_top-residencial"
+    val database = args("database")
+
+    if (args("queries").equals("AssistenciaABQuerys.json")){
+      nomeChave = "plano_assistencia_vida_id"
+      nomeChavePlanoTop = "plano_assistencia_top-vida"
+    }
+
+    if (args("queries").equals("AssistenciaUltronQuerys.json")){
+     chaveForteFinal = chaveForteUltron;
+    }
+
     val typeAction = args("type")
 
     var condition = ""
     if (typeAction.equals("increment")){
-        val diretorio_parquets = args("redshift_key_path")
-        val dfAssistenciaId = glueContext.read.option("compression", "gzip").parquet(diretorio_parquets)
-
-      if (dfAssistenciaId.count() == 0) {
-        logger.warn("Não existem chaves a serem atualizadas")
-        return
-      }
-      val primeiro = dfAssistenciaId.select(nomeChave).collect().map(row=>row.get(0))
-      condition = " and pl.%s IN (%s)".format(nomeChave, primeiro.mkString(", "))
+      val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
+      condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
     }
 
     tempTables(args("redshift_schema"), estrutura, glueContext, configRedshift)
@@ -195,24 +196,16 @@ import scala.com.brasilseg.entity.entityMain
     val queryes = mapQueries.keys.toList.sorted
 
     queryes.foreach{
-        query => glueContext.sql(mapQueries.get(query).get.toString).registerTempTable(query)
+      query => glueContext.sql(mapQueries.get(query).get.toString).registerTempTable(query)
     }
 
     var queryAssistencia = mapQueries.get(queryes.last).get.toString
 
     queryAssistencia = queryAssistencia.concat(condition)
 
-    if (args("queries") == "AssistenciaABQuerys.json"){
-        nomeChave = "plano_assistencia_vida_id"
-        
-        nomeChavePlanoTop = "plano_assistencia_top-vida"
-        
-    }
-
     val sslRedis = args("redis_ssl").toBoolean
 
-    redisClient = if (sslRedis) new Jedis(getAWSSMParameter(args("redis_host")), getAWSSMParameter(args("redis_port")).toInt, true) else
-        new Jedis(args("redis_host"), args("redis_port").toInt, false)
+    redisClient = new Jedis(getAWSSMParameter(args("redis_host")), getAWSSMParameter(args("redis_port")).toInt, sslRedis)
     try {
       if (sslRedis) {
         redisClient.auth(getAWSSMParameter(args("redis_auth")))
@@ -237,27 +230,29 @@ import scala.com.brasilseg.entity.entityMain
       redisClient.quit()
     }
   }
-  
+
 
   def tempTables(redshiftSchema: String, result: Map[String,Map[String,Map[String,List[String]]]], glue: GlueContext, configRedshift: Option[Any]): Unit = {
-      result.foreach {
-          schema: (String, Map[String,Map[String,List[String]]]) => {
-            print(schema._1+" tem as tabelas\n")
-              schema._2.foreach{
-                tableName: (String,Map[String,List[String]]) => {
+    result.foreach {
+      schema: (String, Map[String,Map[String,List[String]]]) => {
+        print(schema._1+" tem as tabelas\n")
+        val e = schema._1.split(".")
+//        val redshiftSchemaFinal: String = e.nonEmpty ? e[0] : redshiftSchema
+        schema._2.foreach{
+          tableName: (String,Map[String,List[String]]) => {
 
-                  dbRedshift(tableName._1, redshiftSchema, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
-                }
-              }
+            dbRedshift(tableName._1, redshiftSchema, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
           }
+        }
       }
+    }
   }
 
   def dbRedshift(table: String, schema: String, pks: List[String], parametros: List[String], glue: GlueContext, configRedshift: Option[Any]): Unit = {
-    
+
     var valor = "*"
     if (!parametros.isEmpty) valor = parametros.distinct.mkString(",")
-    
+
     val redshiftDb = configRedshift match {case Some(m: Map[String, Any]) => m("database") match { case d: String => d }}
     val redshiftUser = configRedshift match {case Some(m: Map[String, Any]) => m("usuario") match { case d: String => d }}
     val redshiftPwd = configRedshift match {case Some(m: Map[String, Any]) => m("senha") match { case d: String => d }}
@@ -269,13 +264,16 @@ import scala.com.brasilseg.entity.entityMain
     var query = "select %s, row_number() over (partition by %s order by data_exportacao desc) as linha from %s.%s".format(valor, pks.mkString(","), schema, table)
 
     logger.info("Redshift - Executando a query: %s".format(query))
-    
+
     glue
-    .read.format("jdbc")
-    .option("url", "jdbc:redshift://%s:%s/%s".format(redshiftEndPoint, redshiftPort, redshiftDb))
-    .option("dbtable", "(%s) foo".format(query))
-    .option("user", redshiftUser)
-    .option("password", redshiftPwd)
-    .load.registerTempTable(table)
+      .read.format("jdbc")
+      .option("url", "jdbc:redshift://%s:%s/%s"
+        .format(redshiftEndPoint, redshiftPort, redshiftDb))
+      .option("tempdir", redshiftTempDir)
+      .option("aws_iam_role", awsIamRole)
+      .option("query", query)
+      .option("user", redshiftUser)
+      .option("password", redshiftPwd)
+      .load.registerTempTable(table)
   }
 }

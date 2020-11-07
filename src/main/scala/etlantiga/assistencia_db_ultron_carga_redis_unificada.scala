@@ -1,4 +1,4 @@
-package com.brasilseg.etl.scripts.bb30.datalake
+package etlantiga
 
 import com.amazonaws.services.glue.GlueContext
 import com.amazonaws.services.glue.util.GlueArgParser
@@ -25,7 +25,11 @@ import java.util.concurrent.atomic.AtomicLong
 
 import scala.com.brasilseg.entity.entityMain
 
-object GlueApp {
+object GlueApp{
+
+  var nomeChave = "plano_assistencia_id"
+
+  var nomeChavePlanoTop = "plano_assistencia_top-residencial"
 
   val BLOCK_PARTITION = 10000
 
@@ -150,7 +154,7 @@ object GlueApp {
 
   def main(sysArgs: Array[String]) {
 
-    args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries").toArray)
+    args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redshift_key_path", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries").toArray)
 
     val sc: SparkContext = initializeSparkContext
     val glueContext: GlueContext = new GlueContext(sc)
@@ -171,31 +175,19 @@ object GlueApp {
     import spark.implicits._
     implicit val formats = DefaultFormats
 
-    val chaveForteSegbr = "plano_assistencia_id"
-    val chaveForteUltron = "id_oferta_plano"
-    var chaveForteFinal = chaveForteSegbr;
-
-    var nomeChave = "plano_assistencia_id"
-    var nomeChavePlanoTop = "plano_assistencia_top-residencial"
-    var database = "abs"
-
-    if (args("queries").equals("AssistenciaABQuerys.json")){
-      nomeChave = "plano_assistencia_vida_id"
-      nomeChavePlanoTop = "plano_assistencia_top-vida"
-      database = "ab"
-    }
-
-    if (args("queries").equals("AssistenciaUltronQuerys.json")){
-     database = "ultron"
-     chaveForteFinal = chaveForteUltron;
-    }
-
     val typeAction = args("type")
 
     var condition = ""
     if (typeAction.equals("increment")){
-      val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
-      condition = " and pl.%s IN (select %s from %s group by plano_assistencia_id)".format(chaveForteFinal, chaveForteFinal, tableTempIds)
+      val diretorio_parquets = args("redshift_key_path")
+      val dfAssistenciaId = glueContext.read.option("compression", "gzip").parquet(diretorio_parquets)
+
+      if (dfAssistenciaId.count() == 0) {
+        logger.warn("Não existem chaves a serem atualizadas")
+        return
+      }
+      val primeiro = dfAssistenciaId.select(nomeChave).collect().map(row=>row.get(0))
+      condition = " and pl.%s IN (%s)".format(nomeChave, primeiro.mkString(", "))
     }
 
     tempTables(args("redshift_schema"), estrutura, glueContext, configRedshift)
@@ -210,9 +202,17 @@ object GlueApp {
 
     queryAssistencia = queryAssistencia.concat(condition)
 
+    if (args("queries") == "AssistenciaABQuerys.json"){
+      nomeChave = "plano_assistencia_vida_id"
+
+      nomeChavePlanoTop = "plano_assistencia_top-vida"
+
+    }
+
     val sslRedis = args("redis_ssl").toBoolean
 
-    redisClient = new Jedis(getAWSSMParameter(args("redis_host")), getAWSSMParameter(args("redis_port")).toInt, sslRedis)
+    redisClient = if (sslRedis) new Jedis(getAWSSMParameter(args("redis_host")), getAWSSMParameter(args("redis_port")).toInt, true) else
+      new Jedis(args("redis_host"), args("redis_port").toInt, false)
     try {
       if (sslRedis) {
         redisClient.auth(getAWSSMParameter(args("redis_auth")))
@@ -243,12 +243,10 @@ object GlueApp {
     result.foreach {
       schema: (String, Map[String,Map[String,List[String]]]) => {
         print(schema._1+" tem as tabelas\n")
-        val e = schema._1.split(".")
-        val redshiftSchemaFinal: String = e.nonEmpty ? e[0] : redshiftSchema
         schema._2.foreach{
           tableName: (String,Map[String,List[String]]) => {
 
-            dbRedshift(tableName._1, redshiftSchemaFinal, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
+            dbRedshift(tableName._1, redshiftSchema, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
           }
         }
       }
@@ -274,11 +272,8 @@ object GlueApp {
 
     glue
       .read.format("jdbc")
-      .option("url", "jdbc:redshift://%s:%s/%s"
-        .format(redshiftEndPoint, redshiftPort, redshiftDb))
-      .option("tempdir", redshiftTempDir)
-      .option("aws_iam_role", awsIamRole)
-      .option("query", query)
+      .option("url", "jdbc:redshift://%s:%s/%s".format(redshiftEndPoint, redshiftPort, redshiftDb))
+      .option("dbtable", "(%s) foo".format(query))
       .option("user", redshiftUser)
       .option("password", redshiftPwd)
       .load.registerTempTable(table)
