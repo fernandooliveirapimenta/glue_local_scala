@@ -188,6 +188,8 @@ object GlueApp {
     var condition = ""
     if (typeAction.equals("increment")){
       val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
+      val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
+      dbRedshift(tableTempIds, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
       condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
     }
 
