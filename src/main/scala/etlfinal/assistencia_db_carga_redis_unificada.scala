@@ -236,12 +236,12 @@ object GlueApp {
     result.foreach {
       schema: (String, Map[String,Map[String,List[String]]]) => {
         print(schema._1+" tem as tabelas\n")
-        val e = schema._1.split(".")
-//        val redshiftSchemaFinal: String = e.nonEmpty ? e[0] : redshiftSchema
+        val e: Array[String] = schema._1.split("\\.")
+        val redshiftSchemaFinal: String = if (e.length > 1) e(0) else redshiftSchema
         schema._2.foreach{
           tableName: (String,Map[String,List[String]]) => {
 
-            dbRedshift(tableName._1, redshiftSchema, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
+            dbRedshift(tableName._1, redshiftSchemaFinal, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
           }
         }
       }
@@ -271,7 +271,7 @@ object GlueApp {
         .format(redshiftEndPoint, redshiftPort, redshiftDb))
       .option("tempdir", redshiftTempDir)
       .option("aws_iam_role", awsIamRole)
-      .option("query", query)
+      .option("dbtable", "(%s) foo".format(query))
       .option("user", redshiftUser)
       .option("password", redshiftPwd)
       .load.registerTempTable(table)
