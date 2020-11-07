@@ -12,7 +12,6 @@
                 "val_custo_assistencia",
                 "dt_inclusao",
                 "dt_alteracao",
-                "lock",
                 "usuario",
                 "tipo_assistencia_id",
                 "num_contrato",
@@ -35,7 +34,6 @@
                 "dt_inicio_vigencia",
                 "dt_inclusao",
                 "dt_alteracao",
-                "lock",
                 "usuario",
                 "prioritario",
                 "limite_monetario",
@@ -59,8 +57,7 @@
                 "descricao",
                 "usuario",
                 "dt_inclusao",
-                "dt_alteracao",
-                "lock"
+                "dt_alteracao"
             ]
         },
         "servico_tb": {
@@ -76,7 +73,6 @@
                 "txt_limite",
                 "dt_inclusao",
                 "dt_alteracao",
-                "lock",
                 "usuario",
                 "tp_abrangencia_id",
                 "codigo_ama",
@@ -110,8 +106,7 @@
                 "razao",
                 "usuario",
                 "dt_inclusao",
-                "dt_alteracao",
-                "lock"
+                "dt_alteracao"
             ]
         },
         "assistencia_questionario_resposta_tb": {
@@ -130,8 +125,7 @@
                 "razao",
                 "usuario",
                 "dt_inclusao",
-                "dt_alteracao",
-                "lock"
+                "dt_alteracao"
             ]
         }
     }

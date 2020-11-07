@@ -1,0 +1,6 @@
+create external schema spectrum_ultron_produto from data catalog
+database 'data_lake_ultron_produto'
+iam_role 'arn:aws:iam::533865883733:role/Brasilseg-RedshiftS3Role'
+REGION 'us-east-1'
+create external database if not exists;
+commit;

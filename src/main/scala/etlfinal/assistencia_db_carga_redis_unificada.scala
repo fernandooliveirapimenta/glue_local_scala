@@ -1,24 +1,27 @@
-package etlfinal
+import com.amazonaws.services.glue.GlueContext
+import com.amazonaws.services.glue.util.GlueArgParser
+import com.amazonaws.services.glue.util.Job
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
+import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
+import com.amazonaws.client.builder.AwsClientBuilder
+import com.amazonaws.services.secretsmanager._
+import com.amazonaws.services.secretsmanager.model._
+
+import redis.clients.jedis.{Jedis, Transaction}
+
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.sql.SparkSession
+
+import org.json4s._
+import org.json4s.jackson.Serialization.write
+
+import scala.collection.JavaConverters._
+import scala.util.parsing.json.JSON
 
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicLong
 
-import com.amazonaws.client.builder.AwsClientBuilder
-import com.amazonaws.services.glue.GlueContext
-import com.amazonaws.services.glue.util.{GlueArgParser, Job}
-import com.amazonaws.services.secretsmanager._
-import com.amazonaws.services.secretsmanager.model._
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
-import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.{SparkConf, SparkContext}
-import org.json4s._
-import org.json4s.jackson.Serialization.write
-import redis.clients.jedis.{Jedis, Transaction}
-
-import scala.collection.JavaConverters._
 import scala.com.brasilseg.entity.entityMain
-import scala.util.parsing.json.JSON
 
 object GlueApp {
 

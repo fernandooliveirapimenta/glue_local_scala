@@ -74,7 +74,7 @@ select principal.id_oferta_plano from
     (
         select
             ofp.id_oferta_plano,  count(pass.id_pacote_assistencia) as qtdPacotes
-            from produto.dbo.oferta_plano ofp
+            from oferta_plano ofp
         join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
         join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
         join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
@@ -87,7 +87,7 @@ select principal.id_oferta_plano from
             from (
             select
                 ofp.id_oferta_plano,  count(pass.id_pacote_assistencia) as qtdPacotes
-                from produto.dbo.oferta_plano ofp
+                from oferta_plano ofp
             join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
             join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
             join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
@@ -104,8 +104,8 @@ select pl.id_oferta_plano as planoId,
      smob.Servicos as servicos,
     null categorias
     from oferta_plano as pl
-     left join tb_teste_mob2 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
-     left join tb_teste_mob3 as smob on smob.id_oferta_plano = pl.id_oferta_plano
+     left join tb_teste_mob1 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
+     left join tb_teste_mob0 as smob on smob.id_oferta_plano = pl.id_oferta_plano
 
 
  Guilherme, boa tarde!
