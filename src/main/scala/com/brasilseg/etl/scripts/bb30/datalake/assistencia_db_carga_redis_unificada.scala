@@ -171,6 +171,10 @@ object GlueApp {
     import spark.implicits._
     implicit val formats = DefaultFormats
 
+    var chaveForteSegbr = "plano_assistencia_id"
+    var chaveForteUltron = "id_oferta_plano"
+    var chaveForteFinal = chaveForteSegbr;
+
     var nomeChave = "plano_assistencia_id"
     var nomeChavePlanoTop = "plano_assistencia_top-residencial"
     var database = "abs"
@@ -181,12 +185,17 @@ object GlueApp {
       database = "ab"
     }
 
+    if (args("queries").equals("AssistenciaUltronQuerys.json")){
+     database = "ultron"
+     chaveForteFinal = chaveForteUltron;
+    }
+
     val typeAction = args("type")
 
     var condition = ""
     if (typeAction.equals("increment")){
       val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
-      condition = " and pl.plano_assistencia_id IN (select plano_assistencia_id from %s group by plano_assistencia_id)".format(tableTempIds)
+      condition = " and pl.%s IN (select %s from %s group by plano_assistencia_id)".format(chaveForteFinal, chaveForteFinal, tableTempIds)
     }
 
     tempTables(args("redshift_schema"), estrutura, glueContext, configRedshift)
@@ -234,10 +243,12 @@ object GlueApp {
     result.foreach {
       schema: (String, Map[String,Map[String,List[String]]]) => {
         print(schema._1+" tem as tabelas\n")
+        val e = schema._1.split(".")
+        val redshiftSchemaFinal: String = e.nonEmpty ? e[0] : redshiftSchema
         schema._2.foreach{
           tableName: (String,Map[String,List[String]]) => {
 
-            dbRedshift(tableName._1, redshiftSchema, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
+            dbRedshift(tableName._1, redshiftSchemaFinal, tableName._2("pk"), tableName._2("estrutura"), glue, configRedshift)
           }
         }
       }
