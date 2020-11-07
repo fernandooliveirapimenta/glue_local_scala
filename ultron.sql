@@ -70,15 +70,41 @@ select ofp.id_oferta_plano,
 
 
 --tb_teste_mob1 -- definir plano top referencia
+select principal.id_oferta_plano from
+    (
+        select
+            ofp.id_oferta_plano,  count(pass.id_pacote_assistencia) as qtdPacotes
+            from produto.dbo.oferta_plano ofp
+        join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
+        join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
+        join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
+        join pacote_assistencia pass on pass.id_pacote_assistencia = cpa.id_pacote_assistencia
+        group by  ofp.id_oferta_plano
+    ) principal
 
---tb_teste_mob1
+    where principal.qtdPacotes = (
+            select  max(a.qtdPacotes)
+            from (
+            select
+                ofp.id_oferta_plano,  count(pass.id_pacote_assistencia) as qtdPacotes
+                from produto.dbo.oferta_plano ofp
+            join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
+            join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
+            join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
+            join pacote_assistencia pass on pass.id_pacote_assistencia = cpa.id_pacote_assistencia
+            group by  ofp.id_oferta_plano
+                ) a
+    )
+
+--tb_teste_mob2 final
 select pl.id_oferta_plano as planoId,
      nvl(pl.nm_plano, "") as nome,
      cast("0" as LONG) as numeroContrato,
-     false as planoReferencia,
+     case when ptop.id_oferta_plano is not null then true else false end planoReferencia,
      smob.Servicos as servicos,
     null categorias
     from oferta_plano as pl
+     left join tb_teste_mob2 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
      left join tb_teste_mob3 as smob on smob.id_oferta_plano = pl.id_oferta_plano
 
 
