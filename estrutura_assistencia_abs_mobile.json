@@ -1,0 +1,138 @@
+{
+    "assistencia_db": {
+        "plano_assistencia_tb": {
+            "pk": [
+                "plano_assistencia_id",
+                "dt_inicio_vigencia"
+            ],
+            "estrutura": [
+                "plano_assistencia_id",
+                "dt_inicio_vigencia",
+                "dt_fim_vigencia",
+                "val_custo_assistencia",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock",
+                "usuario",
+                "tipo_assistencia_id",
+                "num_contrato",
+                "num_versao_contrato",
+                "nome_plano",
+                "descricao_plano",
+                "observacao",
+                "plano_referencia"
+            ]
+        },
+        "assistencia_servico_tb": {
+            "pk": [
+                "plano_assistencia_id",
+                "servico_id",
+                "dt_inicio_vigencia"
+            ],
+            "estrutura": [
+                "servico_id",
+                "plano_assistencia_id",
+                "dt_inicio_vigencia",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock",
+                "usuario",
+                "prioritario",
+                "limite_monetario",
+                "quantidade_servico",
+                "ordem",
+                "dias_acionamento",
+                "limite_quantidade",
+                "tipo_limite_franquia",
+                "categoria_servico_id"
+            ]
+        },
+        "itens_nao_inclusos_tb": {
+            "pk": [
+                "item_id"
+            ],
+            "estrutura": [
+                "item_id",
+                "plano_assistencia_id",
+                "servico_id",
+                "dt_inicio_vigencia",
+                "descricao",
+                "usuario",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock"
+            ]
+        },
+        "servico_tb": {
+            "pk": [
+                "servico_id"
+            ],
+            "tabela_selecao": "assistencia_servico_tb",
+            "parametro_selecao": "servico_id",
+            "valor_selecao": "servico_id",
+            "estrutura": [
+                "servico_id",
+                "txt_servico",
+                "txt_limite",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock",
+                "usuario",
+                "tp_abrangencia_id",
+                "codigo_ama",
+                "descricao"
+            ]
+        },
+        "assistencia_questionario_tb": {
+            "pk": [
+                "questionario_id"
+            ],
+            "tabela_selecao": "assistencia_servico_tb",
+            "parametro_selecao": "servico_id",
+            "valor_selecao": "servico_id",
+            "estrutura": [
+            ]
+        },
+        "assistencia_questionario_pergunta_tb": {
+            "pk": [
+                "pergunta_id"
+            ],
+            "tabela_selecao": "assistencia_questionario_tb",
+            "parametro_selecao": "questionario_id",
+            "valor_selecao": "questionario_id",
+            "estrutura": [
+                "pergunta_id",
+                "questionario_id",
+                "pergunta",
+                "nivel",
+                "preparacao",
+                "multiplas_respostas",
+                "razao",
+                "usuario",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock"
+            ]
+        },
+        "assistencia_questionario_resposta_tb": {
+            "pk": [
+                "resposta_id"
+            ],
+            "tabela_selecao": "assistencia_questionario_pergunta_tb",
+            "parametro_selecao": "pergunta_id",
+            "valor_selecao": "pergunta_id",
+            "estrutura": [
+                "resposta_id",
+                "pergunta_id",
+                "resposta",
+                "proxima_pergunta",
+                "ordem",
+                "razao",
+                "usuario",
+                "dt_inclusao",
+                "dt_alteracao",
+                "lock"
+            ]
+        }
+    }
+}

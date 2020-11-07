@@ -1,0 +1,162 @@
+{
+    "spectrum_ultron_assistencia.assistencia": {
+        "assistencia": {
+            "pk": [
+                "id_assistencia"
+            ],
+            "estrutura": [
+                "id_assistencia",
+                "nm_assistencia",
+                "vl_assistencia",
+                "tx_descricao",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_usuario",
+                "nm_id_transacao"
+            ]
+        },
+        "assistencia_pacote_assistencia": {
+            "pk": [
+                "id_assistencia_pacote_assistencia"
+            ],
+            "estrutura": [
+                "id_assistencia_pacote_assistencia",
+                "id_pacote_assistencia",
+                "id_assistencia",
+                "nm_id_transacao",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_usuario"
+            ]
+        },
+        "pacote_assistencia": {
+            "pk": [
+                "id_pacote_assistencia"
+            ],
+            "estrutura": [
+                "id_pacote_assistencia",
+                "nm_pacote_assistencia",
+                "id_prestador_assistencia",
+                "nr_grupo_ramo",
+                "vl_pacote_assistencia",
+                "cd_pacote_parceiro",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_usuario",
+                "nm_id_transacao",
+                "id_periodicidade",
+                "qt_limite_acionamento",
+                "tx_descricao"
+            ]
+        },
+        "contrato_seguro": {
+            "pk": [
+                "id_contrato_seguro"
+            ],
+            "estrutura": [
+                "id_contrato_seguro",
+                "nr_contrato",
+                "nr_versao_contrato_seguro",
+                "nr_oferta",
+                "nr_versao_oferta",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_usuario",
+                "nm_id_transacao"
+            ]
+        }
+    },
+    "spectrum_ultron_produto.produto": {
+        "oferta": {
+            "pk": [
+                "id_oferta"
+            ],
+            "estrutura": [
+                "id_oferta",
+                "id_situacao",
+                "id_roteiro_calculo",
+                "nr_versao_oferta",
+                "nr_oferta",
+                "nm_oferta",
+                "dt_comercializacao",
+                "dt_inicio_vigencia",
+                "dt_fim_vigencia",
+                "dt_alteracao",
+                "dt_inclusao",
+                "nm_usuario",
+                "id_periodicidade",
+                "qt_min_periodicidade",
+                "qt_max_periodicidade",
+                "in_iof",
+                "in_periodicidade_contratacao",
+                "tx_oferta",
+                "in_ultima_versao",
+                "nm_id_transacao",
+                "nm_login_usuario_autor",
+                "nm_login_usuario_homologador",
+                "nm_login_usuario_comercializacao"
+            ]
+        },
+        "oferta_plano": {
+            "pk": [
+                "id_oferta_plano"
+            ],
+            "estrutura": [
+                "id_oferta_plano",
+                "id_oferta",
+                "nm_plano",
+                "tx_descricao",
+                "vl_comercial",
+                "nm_usuario",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_id_transacao"
+            ]
+        },
+        "oferta_plano_pacote_assistencia": {
+            "pk": [
+                "id_oferta_plano_pacote_assistencia"
+            ],
+            "estrutura": [
+                "id_oferta_plano_pacote_assistencia",
+                "id_oferta_pacote_assistencia",
+                "id_oferta_plano",
+                "nm_usuario",
+                "dt_inclusao",
+                "dt_alteracao",
+                "nm_id_transacao"
+            ]
+        },
+        "oferta_pacote_assistencia": {
+            "pk": [
+                "id_oferta_pacote_assistencia"
+            ],
+            "estrutura": [
+                "id_oferta_pacote_assistencia",
+                "id_chassi_oferta",
+                "id_chassi_pacote_assistencia",
+                "in_obrigatoriedade",
+                "nm_nome_comercial",
+                "nm_usuario",
+                "nm_id_transacao",
+                "dt_inclusao",
+                "dt_alteracao"
+            ]
+        },
+        "chassi_pacote_assistencia": {
+            "pk": [
+                "id_chassi_pacote_assistencia"
+            ],
+            "estrutura": [
+                "id_chassi_pacote_assistencia",
+                "id_chassi",
+                "id_pacote_assistencia",
+                "in_obrigatoriedade",
+                "nm_usuario",
+                "nm_id_transacao",
+                "dt_inclusao",
+                "dt_alteracao"
+            ]
+        }
+    }
+}
