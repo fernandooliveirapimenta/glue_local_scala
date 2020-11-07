@@ -41,44 +41,45 @@
 --      where itn.linha = 1
 --      group by itn.servico_id, itn.plano_assistencia_id;
 
---tb_teste_mob0
-select ass.plano_assistencia_id,
+--tb_teste_mob0 tipoFranquiaServico fixo M
+select ofp.id_oferta_plano,
              collect_list(
                     named_struct(
-                        "servicoId", serv.servico_id,
-                        "servicoCodigoMapfre", nvl(serv.codigo_ama, ""),
-                        "nomeServico", nvl(serv.txt_servico, ""),
-                        "descricaoServico", nvl(serv.descricao, ""),
-                        "franquiaValorMonetario", nvl(ass.limite_monetario, 0),
-                        "franquiaQuantidade", nvl(ass.limite_quantidade, 0),
-                        "limiteAcionamentos", nvl(ass.quantidade_servico, 0),
-                        "tipoFranquiaServico", nvl(ass.tipo_limite_franquia, "M"),
+                        "servicoId", ass.id_assistencia,
+                        "servicoCodigoMapfre", "",
+                        "nomeServico", nvl(ass.nm_assistencia, ""),
+                        "descricaoServico", nvl(ass.tx_descricao, ""),
+                        "franquiaValorMonetario", nvl(ass.vl_assistencia, 0),
+                        "franquiaQuantidade", nvl(pass.qt_limite_acionamento, 0),
+                        "limiteAcionamentos", nvl(pass.qt_limite_acionamento, 0),
+                        "tipoFranquiaServico",  "M",
                         "prioritario",false,
                         "ordem", 100,
-                        "diasAcionamento", nvl(ass.dias_acionamento, 0),
+                        "diasAcionamento", 0,
                         "itensNaoInclusos", null,
                         "questionario", null)
                 ) Servicos
-                join spectrum_ultron_produto.oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
-                join spectrum_ultron_produto.oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
-                join spectrum_ultron_produto.chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
-                join spectrum_ultron_assistencia.pacote_assistencia pass on pass.id_pacote_assistencia = cpa.id_pacote_assistencia
-                join spectrum_ultron_assistencia.assistencia_pacote_assistencia apass on apass.id_pacote_assistencia = pass.id_pacote_assistencia
-                join spectrum_ultron_assistencia.assistencia ass on ass.id_assistencia = apass.id_assistencia
+                from oferta_plano ofp
+                join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano
+                join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia
+                join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia
+                join pacote_assistencia pass on pass.id_pacote_assistencia = cpa.id_pacote_assistencia
+                join assistencia_pacote_assistencia apass on apass.id_pacote_assistencia = pass.id_pacote_assistencia
+                join assistencia ass on ass.id_assistencia = apass.id_assistencia
                  group by ass.plano_assistencia_id;
+
 
 --tb_teste_mob1 -- definir plano top referencia
 
 --tb_teste_mob1
-select pl.plano_assistencia_id as planoId,
-     nvl(pl.nome_plano, "") as nome,
-     cast(nvl(pl.num_contrato, "0") as LONG) as numeroContrato,
-     case when plano_referencia = 'S' then true when plano_referencia = 'N' then false else false end planoReferencia,
+select pl.id_oferta_plano as planoId,
+     nvl(pl.nm_plano, "") as nome,
+     cast("0" as LONG) as numeroContrato,
+     false as planoReferencia,
      smob.Servicos as servicos,
     null categorias
-    from plano_assistencia_tb as pl
-     left join tb_teste_mob3 as smob on smob.plano_assistencia_id = pl.plano_assistencia_id
-      where pl.usuario like "%CARGA_BB_3.0%"  and pl.linha = 1 ;
+    from oferta_plano as pl
+     left join tb_teste_mob3 as smob on smob.id_oferta_plano = pl.id_oferta_plano
 
 
  Guilherme, boa tarde!
