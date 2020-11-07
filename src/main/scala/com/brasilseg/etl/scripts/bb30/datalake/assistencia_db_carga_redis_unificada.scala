@@ -171,8 +171,8 @@ object GlueApp {
     import spark.implicits._
     implicit val formats = DefaultFormats
 
-    var chaveForteSegbr = "plano_assistencia_id"
-    var chaveForteUltron = "id_oferta_plano"
+    val chaveForteSegbr = "plano_assistencia_id"
+    val chaveForteUltron = "id_oferta_plano"
     var chaveForteFinal = chaveForteSegbr;
 
     var nomeChave = "plano_assistencia_id"
