@@ -66,7 +66,7 @@ select ofp.id_oferta_plano,
                 join pacote_assistencia pass on pass.id_pacote_assistencia = cpa.id_pacote_assistencia
                 join assistencia_pacote_assistencia apass on apass.id_pacote_assistencia = pass.id_pacote_assistencia
                 join assistencia ass on ass.id_assistencia = apass.id_assistencia
-                 group by ass.plano_assistencia_id;
+                 group by ofp.id_oferta_plano;
 
 
 --tb_teste_mob1 -- definir plano top referencia

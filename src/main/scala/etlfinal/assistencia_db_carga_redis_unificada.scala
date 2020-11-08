@@ -218,6 +218,8 @@ object GlueApp {
       redisClient.select(args("redis_db").toInt)
 
       val dfRedis = glueContext.sql(queryAssistencia)
+      //todo remover
+      dfRedis.show()
       val listaRedis = dfRedis.as[entityMain.Main].collect().grouped(BLOCK_PARTITION).toList
       listaRedis.foreach {
         particao: Array[entityMain.Main] => {
