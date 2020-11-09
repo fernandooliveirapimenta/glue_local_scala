@@ -38,11 +38,11 @@ select 0 as servico_id,
 select ofp.id_oferta_plano,
              collect_list(
                     named_struct(
-                        "servicoId", concat("1000", ass.id_assistencia),
+                        "servicoId", cast(concat("30", ass.id_assistencia) as int),
                         "servicoCodigoMapfre", "",
                         "nomeServico", nvl(ass.nm_assistencia, ""),
                         "descricaoServico", nvl(ass.tx_descricao, ""),
-                        "franquiaValorMonetario", nvl(ass.vl_assistencia, 0),
+                        "franquiaValorMonetario", cast(nvl(ass.vl_assistencia, 0) as double),
                         "franquiaQuantidade", nvl(pass.qt_limite_acionamento, 0),
                         "limiteAcionamentos", nvl(pass.qt_limite_acionamento, 0),
                         "tipoFranquiaServico",  "M",
@@ -52,9 +52,9 @@ select ofp.id_oferta_plano,
                         "itensNaoInclusos", itens.Descricao.descricaoItem,
                         "questionario", perg.Perguntas)
                 ) Servicos
-                from oferta_plano ofp,
-                tb_teste_mob2 as itens,
-                tb_teste_mob1 as perg
+                from oferta_plano ofp
+                cross join tb_teste_mob2 as itens
+                cross join tb_teste_mob1 as perg
                 left join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano and ofpa.linha = 1
                 left join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia and opa.linha = 1
                 left join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia and cpa.linha = 1
@@ -63,6 +63,8 @@ select ofp.id_oferta_plano,
                 left join assistencia ass on ass.id_assistencia = apass.id_assistencia and ass.linha = 1
                 where ofp.linha = 1
                 group by ofp.id_oferta_plano
+
+
 
 
 --tb_teste_mob4
@@ -95,7 +97,7 @@ select principal.id_oferta_plano from
     )
 
 --tb_teste_mob5 final
-select concat("1000", pl.id_oferta_plano)  as planoId,
+select cast(concat("30", pl.id_oferta_plano) as int)  as planoId,
      nvl(pl.nm_plano, "") as nome,
      cast("0" as LONG) as numeroContrato,
      case when ptop.id_oferta_plano is not null then true else false end planoReferencia,
