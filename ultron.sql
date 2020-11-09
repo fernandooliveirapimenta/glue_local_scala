@@ -23,6 +23,7 @@ select 1 as questionario_id,
                         "respostas", rmob.Respostas)
             ) as Perguntas
         from tb_teste_mob0 rmob
+        where 3 > 5
 
 --tb_teste_mob2 itens
 select 0 as servico_id,
@@ -32,13 +33,14 @@ select 0 as servico_id,
                 "descricaoItem", ""
                 )
          ) as Descricao
+      where 3 > 5
 
 
 --tb_teste_mob3
 select ofp.id_oferta_plano,
              collect_list(
                     named_struct(
-                        "servicoId", cast(concat("30", ass.id_assistencia) as int),
+                        "servicoId", case  when ass.id_assistencia is null then 0 else cast(concat("1000", nvl(ass.id_assistencia, 0)) as int)  end ,
                         "servicoCodigoMapfre", "",
                         "nomeServico", nvl(ass.nm_assistencia, ""),
                         "descricaoServico", nvl(ass.tx_descricao, ""),

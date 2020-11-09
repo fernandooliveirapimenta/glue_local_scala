@@ -184,6 +184,7 @@ object GlueApp {
 
     if (args("queries").equals("AssistenciaUltronQuerys.json")){
      chaveForteFinal = chaveForteUltron;
+      nomeChavePlanoTop = "plano_assistencia_top-ultron"
     }
 
     val typeAction = args("type")
