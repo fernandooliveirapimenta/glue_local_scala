@@ -1,6 +1,6 @@
 
 
--- ultron_respostas_vazio
+-- tb_teste_mob0 respostas
 select 1 as pergunta_id,
      collect_list(
              named_struct(
@@ -11,7 +11,7 @@ select 1 as pergunta_id,
                     "razaoResposta", 0  )
      ) as Respostas
 
---ultron_perguntas_vazio
+--tb_teste_mob1 perguntas
 select 1 as questionario_id,
         collect_list(
                     named_struct(
@@ -22,9 +22,9 @@ select 1 as questionario_id,
                         "razaoPergunta", "",
                         "respostas", rmob.Respostas)
             ) as Perguntas
-        from ultron_respostas_vazio rmob
+        from tb_teste_mob0 rmob
 
---ultron_itens_nao_inc_vazio
+--tb_teste_mob2 itens
 select 0 as servico_id,
      1 as plano_assistencia_id,
      collect_list(
@@ -34,7 +34,7 @@ select 0 as servico_id,
          ) as Descricao
 
 
---tb_teste_mob0 tipoFranquiaServico fixo M
+--tb_teste_mob3
 select ofp.id_oferta_plano,
              collect_list(
                     named_struct(
@@ -53,8 +53,8 @@ select ofp.id_oferta_plano,
                         "questionario", perg.Perguntas)
                 ) Servicos
                 from oferta_plano ofp,
-                ultron_itens_nao_inc_vazio as itens,
-                ultron_perguntas_vazio as perg
+                tb_teste_mob2 as itens,
+                tb_teste_mob1 as perg
                 left join oferta_plano_pacote_assistencia ofpa on ofpa.id_oferta_plano = ofp.id_oferta_plano and ofpa.linha = 1
                 left join oferta_pacote_assistencia opa on opa.id_oferta_pacote_assistencia = ofpa.id_oferta_pacote_assistencia and opa.linha = 1
                 left join chassi_pacote_assistencia cpa on cpa.id_chassi_pacote_assistencia = opa.id_chassi_pacote_assistencia and cpa.linha = 1
@@ -65,7 +65,7 @@ select ofp.id_oferta_plano,
                 group by ofp.id_oferta_plano
 
 
---tb_teste_mob1 -- definir plano top referencia
+--tb_teste_mob4
 select principal.id_oferta_plano from
     (
         select
@@ -94,7 +94,7 @@ select principal.id_oferta_plano from
                 ) a
     )
 
---tb_teste_mob2 final
+--tb_teste_mob5 final
 select concat("1000", pl.id_oferta_plano)  as planoId,
      nvl(pl.nm_plano, "") as nome,
      cast("0" as LONG) as numeroContrato,
@@ -102,6 +102,6 @@ select concat("1000", pl.id_oferta_plano)  as planoId,
      smob.Servicos as servicos,
     null categorias
     from oferta_plano as pl
-     left join tb_teste_mob1 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
-     left join tb_teste_mob0 as smob on smob.id_oferta_plano = pl.id_oferta_plano
+     left join tb_teste_mob4 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
+     left join tb_teste_mob3 as smob on smob.id_oferta_plano = pl.id_oferta_plano
      where pl.linha = 1
