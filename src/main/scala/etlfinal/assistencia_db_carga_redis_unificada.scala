@@ -6,20 +6,17 @@ import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
 import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.secretsmanager._
 import com.amazonaws.services.secretsmanager.model._
-
 import redis.clients.jedis.{Jedis, Transaction}
-
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
-
 import org.json4s._
 import org.json4s.jackson.Serialization.write
 
 import scala.collection.JavaConverters._
 import scala.util.parsing.json.JSON
-
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicLong
+
 
 import scala.com.brasilseg.entity.entityMain
 
@@ -292,6 +289,8 @@ object GlueApp {
     var query = "select %s, row_number() over (partition by %s order by data_exportacao desc) as linha from %s.%s".format(valor, pks.mkString(","), schema, table)
 
     logger.info("Redshift - Executando a query: %s".format(query))
+
+    Class.forName("com.amazon.redshift.jdbc.Driver")
 
     glue
       .read.format("jdbc")
