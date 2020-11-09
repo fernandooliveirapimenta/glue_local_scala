@@ -148,7 +148,15 @@ object GlueApp {
 
   def main(sysArgs: Array[String]) {
 
-    args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries", "database").toArray)
+    val sysArgsString: String = sysArgs.mkString("Array(", ", ", ")")
+    // incremental antigo
+    if(sysArgsString.contains("--redshift_key_path")) {
+      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redshift_key_path", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries").toArray)
+    } else {
+      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries", "database").toArray)
+    }
+
+
 
     val sc: SparkContext = initializeSparkContext
     val glueContext: GlueContext = new GlueContext(sc)
@@ -175,7 +183,6 @@ object GlueApp {
 
     var nomeChave = "plano_assistencia_id"
     var nomeChavePlanoTop = "plano_assistencia_top-residencial"
-    val database = args("database")
 
     if (args("queries").equals("AssistenciaABQuerys.json")){
       nomeChave = "plano_assistencia_vida_id"
@@ -194,6 +201,7 @@ object GlueApp {
     if (typeAction.equals("increment")){
       // Ultron é diferente a forma incremental
       if (args("queries").equals("AssistenciaUltronQuerys.json")){
+        val database = args("database")
         val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
         val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
         dbRedshift(tableTempIds, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
