@@ -40,8 +40,8 @@ select 0 as servico_id,
 select ofp.id_oferta_plano,
              collect_list(
                     named_struct(
-                        "servicoId", case  when ass.id_assistencia is null then 0 else cast(concat("1000", nvl(ass.id_assistencia, 0)) as int)  end ,
-                        "servicoCodigoMapfre", "",
+                        "servicoId", case  when ass.id_assistencia is null then 0 else cast(100000 + nvl(ass.id_assistencia, 0) as int)  end ,
+                        "servicoCodigoMapfre", "1000",
                         "nomeServico", nvl(ass.nm_assistencia, ""),
                         "descricaoServico", nvl(ass.tx_descricao, ""),
                         "franquiaValorMonetario", cast(nvl(ass.vl_assistencia, 0) as double),
@@ -99,9 +99,9 @@ select principal.id_oferta_plano from
     )
 
 --tb_teste_mob5 final
-select cast(concat("30", pl.id_oferta_plano) as int)  as planoId,
-     nvl(pl.nm_plano, "") as nome,
-     cast("0" as LONG) as numeroContrato,
+select cast(100000 + nvl(pl.id_oferta_plano, 0) as int)  as planoId,
+     nvl(pl.nm_plano, '') as nome,
+     case  when lower(nvl(pl.nm_plano, '')) like '%essencial%' then 548441  when lower(nvl(pl.nm_plano, '')) like '%total%' then 551137  else 551139 end as numeroContrato,
      case when ptop.id_oferta_plano is not null then true else false end planoReferencia,
      smob.Servicos as servicos,
     null categorias
@@ -109,3 +109,4 @@ select cast(concat("30", pl.id_oferta_plano) as int)  as planoId,
      left join tb_teste_mob4 as ptop on ptop.id_oferta_plano = pl.id_oferta_plano
      left join tb_teste_mob3 as smob on smob.id_oferta_plano = pl.id_oferta_plano
      where pl.linha = 1
+
