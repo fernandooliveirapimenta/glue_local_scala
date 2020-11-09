@@ -190,11 +190,25 @@ object GlueApp {
     val typeAction = args("type")
 
     var condition = ""
+
     if (typeAction.equals("increment")){
-      val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
-      val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
-      dbRedshift(tableTempIds, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
-      condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
+      // Ultron é diferente a forma incremental
+      if (args("queries").equals("AssistenciaUltronQuerys.json")){
+        val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
+        val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
+        dbRedshift(tableTempIds, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
+        condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
+      } else {
+        val diretorio_parquets = args("redshift_key_path")
+        val dfAssistenciaId = glueContext.read.option("compression", "gzip").parquet(diretorio_parquets)
+
+        if (dfAssistenciaId.count() == 0) {
+          logger.warn("Não existem chaves a serem atualizadas")
+          return
+        }
+        val primeiro = dfAssistenciaId.select(nomeChave).collect().map(row=>row.get(0))
+        condition = " and pl.%s IN (%s)".format(nomeChave, primeiro.mkString(", "))
+      }
     }
 
     tempTables(args("redshift_schema"), estrutura, glueContext, configRedshift)
