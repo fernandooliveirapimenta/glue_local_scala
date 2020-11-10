@@ -212,8 +212,8 @@ object GlueApp {
           logger.warn("Não existem chaves a serem atualizadas")
           return
         }
-        val primeiro = dfAssistenciaId.select(nomeChave).collect().map(row=>row.get(0))
-        condition = " and pl.%s IN (%s)".format(nomeChave, primeiro.mkString(", "))
+        val primeiro = dfAssistenciaId.select(chaveForteSegbr).collect().map(row=>row.get(0))
+        condition = " and pl.%s IN (%s)".format(chaveForteSegbr, primeiro.mkString(", "))
       }
     }
 
