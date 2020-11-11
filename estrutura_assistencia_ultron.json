@@ -158,5 +158,18 @@
                 "dt_alteracao"
             ]
         }
+    },
+    "public.public": {
+        "ultron_assistencia_ordenacao": {
+            "pk": [
+                "id_servico"
+            ],
+            "estrutura": [
+                "id_servico",
+                "id_ordem",
+                "itens_nao_inclusos",
+                "emergencial"
+            ]
+        }
     }
 }
