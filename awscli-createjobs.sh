@@ -260,7 +260,7 @@
             "--queries":"AssistenciaUltronQuerys.json",
             "--spark-event-logs-path": "s3://brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_historico/",
             "--type": "full"}' \
-        --connections '{"Connections": ["redshift_dw"]}'\
+        --connections '{"Connections": ["dw_db"]}'\
         --tags '{
                    "SubProjeto":"bb30",
                    "UnidadeDeNegocios":"massificados",
@@ -311,7 +311,7 @@
             "--queries":"AssistenciaUltronQuerys.json",
             "--spark-event-logs-path": "s3://brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_incremental/",
             "--type": "increment"}' \
-        --connections '{"Connections": ["redshift_dw"]}'\
+        --connections '{"Connections": ["dw_db"]}'\
         --tags '{
                    "SubProjeto":"bb30",
                    "UnidadeDeNegocios":"massificados",
