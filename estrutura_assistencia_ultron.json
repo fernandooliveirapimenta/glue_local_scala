@@ -48,22 +48,6 @@
                 "qt_limite_acionamento",
                 "tx_descricao"
             ]
-        },
-        "contrato_seguro": {
-            "pk": [
-                "id_contrato_seguro"
-            ],
-            "estrutura": [
-                "id_contrato_seguro",
-                "nr_contrato",
-                "nr_versao_contrato_seguro",
-                "nr_oferta",
-                "nr_versao_oferta",
-                "dt_inclusao",
-                "dt_alteracao",
-                "nm_usuario",
-                "nm_id_transacao"
-            ]
         }
     },
     "spectrum_ultron_produto.produto": {
