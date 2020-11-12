@@ -1,5 +1,5 @@
 {
-    "spectrum_ultron_assistencia.assistencia": {
+    "spectrum_assistencia_ultron.assistencia": {
         "assistencia": {
             "pk": [
                 "id_assistencia"
@@ -50,7 +50,7 @@
             ]
         }
     },
-    "spectrum_ultron_produto.produto": {
+    "spectrum_produto_ultron.produto": {
         "oferta": {
             "pk": [
                 "id_oferta"

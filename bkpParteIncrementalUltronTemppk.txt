@@ -1,0 +1,21 @@
+  if (typeAction.equals("increment")){ //todo ultron vai ler do s3 tb
+      // Ultron é diferente a forma incremental
+      if (args("queries").equals("AssistenciaUltronQuerys.json")){
+        val database = args("database")
+        val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
+        val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
+        val table = tableTempIds.split("\\.")(1)
+        dbRedshift(table, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
+        condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
+      } else {
+        val diretorio_parquets = args("redshift_key_path")
+        val dfAssistenciaId = glueContext.read.option("compression", "gzip").parquet(diretorio_parquets)
+
+        if (dfAssistenciaId.count() == 0) {
+          logger.warn("Não existem chaves a serem atualizadas")
+          return
+        }
+        val primeiro = dfAssistenciaId.select(chaveForteSegbr).collect().map(row=>row.get(0))
+        condition = " and pl.%s IN (%s)".format(chaveForteSegbr, primeiro.mkString(", "))
+      }
+    }

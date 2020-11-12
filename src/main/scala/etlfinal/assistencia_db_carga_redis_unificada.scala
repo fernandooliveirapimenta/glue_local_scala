@@ -17,6 +17,10 @@ import scala.util.parsing.json.JSON
 import java.nio.ByteBuffer
 import java.util.concurrent.atomic.AtomicLong
 
+// Importações hadoop / URI
+import java.net.URI
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
 
 import scala.com.brasilseg.entity.entityMain
 
@@ -146,11 +150,10 @@ object GlueApp {
   def main(sysArgs: Array[String]) {
 
     val sysArgsString: String = sysArgs.mkString("Array(", ", ", ")")
-    // incremental antigo
     if(sysArgsString.contains("--redshift_key_path")) {
-      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redshift_key_path", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries").toArray)
+      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redshift_key_path", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "queries").toArray)
     } else {
-      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "filter", "queries", "database").toArray)
+      args = GlueArgParser.getResolvedOptions(sysArgs, Seq("JOB_NAME", "environment", "type", "redshift_credentials", "redis_db", "redis_port", "redis_host", "redis_ssl", "redis_auth", "redshift_schema", "schema", "queries").toArray)
     }
 
 
@@ -196,24 +199,20 @@ object GlueApp {
     var condition = ""
 
     if (typeAction.equals("increment")){
-      // Ultron é diferente a forma incremental
-      if (args("queries").equals("AssistenciaUltronQuerys.json")){
-        val database = args("database")
-        val tableTempIds = "temp_pk_tabela_%s.chaves_redis_assistencia".format(database)
-        val redshiftSchemaTemp = tableTempIds.split("\\.")(0)
-        val table = tableTempIds.split("\\.")(1)
-        dbRedshift(table, redshiftSchemaTemp, List(chaveForteFinal), List(), glueContext, configRedshift)
-        condition = " and pl.%s IN (select %s from %s group by %s)".format(chaveForteFinal, chaveForteFinal, tableTempIds, chaveForteFinal)
-      } else {
-        val diretorio_parquets = args("redshift_key_path")
+      val diretorio_parquets = args("redshift_key_path")
+      if (hasStrongfiles(sc, diretorio_parquets)){
         val dfAssistenciaId = glueContext.read.option("compression", "gzip").parquet(diretorio_parquets)
 
         if (dfAssistenciaId.count() == 0) {
-          logger.warn("Não existem chaves a serem atualizadas")
+          logger.warn("Não existem chaves a serem atualizadas log1")
           return
         }
-        val primeiro = dfAssistenciaId.select(chaveForteSegbr).collect().map(row=>row.get(0))
-        condition = " and pl.%s IN (%s)".format(chaveForteSegbr, primeiro.mkString(", "))
+        val primeiro = dfAssistenciaId.select("*").collect().map(row=>row.get(0))
+        condition = " and pl.%s IN (%s)".format(chaveForteFinal, primeiro.mkString(", "))
+        logger.warn(" incremental codicao " + condition)
+      } else {
+        logger.warn("Não existem chaves a serem atualizadas log2")
+        return
       }
     }
 
@@ -271,6 +270,23 @@ object GlueApp {
           }
         }
       }
+    }
+  }
+
+  def hasStrongfiles(sc: SparkContext, caminhoBucketCompleto: String): Boolean = {
+    logger.warn(" checando chaves fortes no caminho "+caminhoBucketCompleto)
+    try {
+      val splitado: Array[String] = caminhoBucketCompleto.split("/");
+      //ex s3://dev-brasiseg-segbr-extracao
+      val bucketPath: String = s"${splitado(0)}//${splitado(2)}"
+      logger.warn(" bucketPath " + bucketPath)
+      // ex /chaves-redis/assistencia_ultron/assistencia
+      val arquivos: String = caminhoBucketCompleto.replace(bucketPath, "")
+      logger.warn(" arquivos " + arquivos)
+      val files = FileSystem.get(new URI(caminhoBucketCompleto), sc.hadoopConfiguration).listFiles(new Path(arquivos), false)
+      files.hasNext
+    } catch {
+      case e: java.io.FileNotFoundException => false
     }
   }
 
