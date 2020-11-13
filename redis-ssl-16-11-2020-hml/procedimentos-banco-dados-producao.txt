@@ -1,0 +1,9 @@
+Segue abaixo os procedimentos a serem executados no ambiente de produção:
+
+- Copiar o anexo criacao-schemas.sql para a instância EC2 de Banco de Dados.
+
+- Conectar via SSH na intância EC2 de Banco de Dados.
+
+- Executar o script abaixo de dentro da instância EC2 de Banco de Dados:
+
+../script/sql-client.sh criacao-schemas.sql
