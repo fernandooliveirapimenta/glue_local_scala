@@ -2,6 +2,7 @@
 #-- DEV scala
 aws glue delete-job \
 --job-name bb30_carga_assistencia_redis_ultron_incremental --region us-east-1
+
 #bb30_carga_assistencia_redis_ultron_historico
     #full
     aws glue create-job \
