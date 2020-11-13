@@ -88,8 +88,8 @@ aws glue update-job \
     "--schema":"estrutura_assistencia_ultron.json",
     "--redshift_key_path": "s3://hml-brasilseg-segbr-extracao/chaves-redis/ultron/assistencia",
     "--queries":"AssistenciaUltronQuerys.json",
-    "--spark-event-logs-path": "s3://hml-brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_historico/",
-    "--type": "full"
+    "--spark-event-logs-path": "s3://hml-brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_incremental/",
+    "--type": "increment"
   },
   "Connections": {
     "Connections": [
