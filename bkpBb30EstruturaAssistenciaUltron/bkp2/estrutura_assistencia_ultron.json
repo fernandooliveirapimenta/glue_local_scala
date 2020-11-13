@@ -1,0 +1,199 @@
+{
+    "assistencia": {
+        "pacote_assistencia": {
+            "pk": [
+                "id_pacote_assistencia"
+            ],
+            "tabela_selecao": "chassi_pacote_assistencia",
+            "parametro_selecao": "id_pacote_assistencia",
+            "valor_selecao": "id_pacote_assistencia",
+            "estrutura": [
+                ["id_pacote_assistencia", "string", "id_pacote_assistencia", "int"],
+                ["nm_pacote_assistencia", "string", "nm_pacote_assistencia", "string"],
+                ["id_prestador_assistencia", "string", "id_prestador_assistencia", "smallint"],
+                ["nr_grupo_ramo", "string", "nr_grupo_ramo", "string"],
+                ["vl_pacote_assistencia", "string", "vl_pacote_assistencia", "decimal"],
+                ["cd_pacote_parceiro", "string", "cd_pacote_parceiro", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["id_periodicidade", "string", "id_periodicidade", "smallint"],
+                ["qt_limite_acionamento", "string", "qt_limite_acionamento", "int"],
+                ["tx_descricao", "string", "tx_descricao", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+
+            ]
+        },
+        "assistencia_pacote_assistencia": {
+            "pk": [
+                "id_assistencia_pacote_assistencia"
+            ],
+            "tabela_selecao": "pacote_assistencia",
+            "parametro_selecao": "id_pacote_assistencia",
+            "valor_selecao": "id_pacote_assistencia",
+            "estrutura": [
+                ["id_assistencia_pacote_assistencia", "string", "id_assistencia_pacote_assistencia", "int"],
+                ["id_pacote_assistencia", "string", "id_pacote_assistencia", "int"],
+                ["id_assistencia", "string", "id_assistencia", "int"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+            ]
+        },
+        "assistencia": {
+            "pk": [
+                "id_assistencia"
+            ],
+            "tabela_selecao": "assistencia_pacote_assistencia",
+            "parametro_selecao": "id_assistencia",
+            "valor_selecao": "id_assistencia",
+            "estrutura": [
+                ["id_assistencia", "string", "id_assistencia", "int"],
+                ["nm_assistencia", "string", "nm_assistencia", "string"],
+                ["vl_assistencia", "string", "vl_assistencia", "decimal"],
+                ["tx_descricao", "string", "tx_descricao", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+            ]
+        }
+    },
+    "produto": {
+        "oferta_plano": {
+            "pk": [
+                "id_oferta_plano"
+            ],
+            "estrutura": [
+                ["id_oferta_plano", "string", "id_oferta_plano", "int"],
+                ["id_oferta", "string", "id_oferta", "int"],
+                ["nm_plano", "string", "nm_plano", "string"],
+                ["tx_descricao", "string", "tx_descricao", "string"],
+                ["vl_comercial", "string", "vl_comercial", "decimal"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+            ]
+        },
+        "oferta": {
+            "pk": [
+                "id_oferta"
+            ],
+            "tabela_selecao": "oferta_plano",
+            "parametro_selecao": "id_oferta",
+            "valor_selecao": "id_oferta",
+            "estrutura": [
+                ["id_oferta", "string", "id_oferta", "int"],
+                ["id_situacao", "string", "id_situacao", "smallint"],
+                ["id_roteiro_calculo", "string", "id_roteiro_calculo", "int"],
+                ["nr_versao_oferta", "string", "nr_versao_oferta", "int"],
+                ["nr_oferta", "string", "nr_oferta", "int"],
+                ["nm_oferta", "string", "nm_oferta", "string"],
+                ["dt_comercializacao", "string", "dt_comercializacao", "timestamp"],
+                ["dt_inicio_vigencia", "string", "dt_inicio_vigencia", "timestamp"],
+                ["dt_fim_vigencia", "string", "dt_fim_vigencia", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["id_periodicidade", "string", "id_periodicidade", "smallint"],
+                ["qt_min_periodicidade", "string", "qt_min_periodicidade", "int"],
+                ["qt_max_periodicidade", "string", "qt_max_periodicidade", "int"],
+                ["in_iof", "string", "in_iof", "boolean"],
+                ["in_periodicidade_contratacao", "string", "in_periodicidade_contratacao", "boolean"],
+                ["tx_oferta", "string", "tx_oferta", "string"],
+                ["in_ultima_versao", "string", "in_ultima_versao", "boolean"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["nm_login_usuario_autor", "string", "nm_login_usuario_autor", "string"],
+                ["nm_login_usuario_homologador", "string", "nm_login_usuario_homologador", "string"],
+                ["nm_login_usuario_comercializacao", "string", "nm_login_usuario_comercializacao", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+            ]
+        },
+        "oferta_plano_pacote_assistencia": {
+            "pk": [
+                "id_oferta_plano_pacote_assistencia"
+            ],
+            "estrutura": [
+                ["id_oferta_plano_pacote_assistencia", "string", "id_oferta_plano_pacote_assistencia", "int"],
+                ["id_oferta_pacote_assistencia", "string", "id_oferta_pacote_assistencia", "int"],
+                ["id_oferta_plano", "string", "id_oferta_plano", "int"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+
+            ]
+        },
+        "oferta_pacote_assistencia": {
+            "pk": [
+                "id_oferta_pacote_assistencia"
+            ],
+            "tabela_selecao": "oferta_plano_pacote_assistencia",
+            "parametro_selecao": "id_oferta_pacote_assistencia",
+            "valor_selecao": "id_oferta_pacote_assistencia",
+            "estrutura": [
+                ["id_oferta_pacote_assistencia", "string", "id_oferta_pacote_assistencia", "int"],
+                ["id_chassi_oferta", "string", "id_chassi_oferta", "int"],
+                ["id_chassi_pacote_assistencia", "string", "id_chassi_pacote_assistencia", "int"],
+                ["in_obrigatoriedade", "string", "in_obrigatoriedade", "boolean"],
+                ["nm_nome_comercial", "string", "nm_nome_comercial", "string"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+
+            ]
+        },
+        "chassi_pacote_assistencia": {
+            "pk": [
+                "id_chassi_pacote_assistencia"
+            ],
+            "tabela_selecao": "oferta_pacote_assistencia",
+            "parametro_selecao": "id_chassi_pacote_assistencia",
+            "valor_selecao": "id_chassi_pacote_assistencia",
+            "estrutura": [
+                ["id_chassi_pacote_assistencia", "string", "id_chassi_pacote_assistencia", "int"],
+                ["id_chassi", "string", "id_chassi", "int"],
+                ["id_pacote_assistencia", "string", "id_pacote_assistencia", "int"],
+                ["in_obrigatoriedade", "string", "in_obrigatoriedade", "boolean"],
+                ["nm_usuario", "string", "nm_usuario", "string"],
+                ["nm_id_transacao", "string", "nm_id_transacao", "string"],
+                ["dt_inclusao", "string", "dt_inclusao", "timestamp"],
+                ["dt_alteracao", "string", "dt_alteracao", "timestamp"],
+                ["data_exportacao", "string", "data_exportacao", "timestamp"],
+                ["op", "string", "op", "string"],
+                ["Ano", "smallint", "Ano", "smallint"],
+                ["Mes", "smallint", "Mes", "smallint"]
+            ]
+        }
+    }
+}

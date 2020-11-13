@@ -1,0 +1,7 @@
+--environment aws
+--database ultron
+--keys id_pacote_assistencia;id_proposta;id_evento_timeline
+--redshift_credentials dev/redshiftDW
+--schemas s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_assistencia_ultron.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta_ultron.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro_ultron.json
+--entities assistencia;proposta;evento_sinistro
+--target_key_path s3://dev-brasilseg-segbr-extracao/chaves-redis/%s/%s
