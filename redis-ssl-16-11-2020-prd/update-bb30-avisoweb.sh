@@ -3,11 +3,11 @@ profile=$1
 echo $profile
 echo "Criando a política de leitura do Systems Managem - Parameter Store"
 
-#aws iam create-policy --policy-name SSMGetParameterAccess --policy-document,{    "Version": "2012-10-17",    "Statement": [        {            "Sid": "VisualEditor0",            "Effect": "Allow",            "Action": [                "ssm:DescribeParameters",                "ssm:GetParameters",                "ssm:GetParameter"            ],            "Resource": "*"        }    ]}' --profile $profile
+aws iam create-policy --policy-name SSMGetParameterAccess --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"VisualEditor0","Effect":"Allow","Action":["ssm:DescribeParameters","ssm:GetParameters","ssm:GetParameter"],"Resource":"*"}]}' --profile $profile
 
 echo "Anexando a política criada a role Brasilseg-GlueRole"
 
-#aws iam attach-role-policy --policy-arn arn:aws:iam::909530209831:policy/SSMGetParameterAccess --role-name Brasilseg-Glue-Role --profile $profile
+aws iam attach-role-policy --policy-arn arn:aws:iam::909530209831:policy/SSMGetParameterAccess --role-name Brasilseg-Glue-Role --profile $profile
 
 echo "Apontando para o diretório de scripts ..."
 

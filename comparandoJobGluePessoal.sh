@@ -33,4 +33,8 @@ asw_carga_redis_ab_seguros_db_incremental_async_proposta
 asw_carga_redis_ab_seguros_db_incremental_async_sinistro
 asw_carga_redis_ab_seguros_db_historico_etl
 
+aws iam create-policy --policy-name SSMGetParameterAccess --policy-document '{"Version":"2012-10-17","Statement":[{"Sid":"VisualEditor0","Effect":"Allow","Action":["ssm:DescribeParameters","ssm:GetParameters","ssm:GetParameter"],"Resource":"*"}]}' --profile pessoal
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::909530209831:policy/SSMGetParameterAccess --role-name Brasilseg-Glue-Role --profile $profile
+
 
