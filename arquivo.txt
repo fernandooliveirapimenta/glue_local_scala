@@ -11,4 +11,4 @@
 
 '--extra-files':'s3://datalake-glue-scripts/estrutura_query/sinistro_ab_redshift_queries.json'
 
- ,"--extra-jars": "s3://datalake-glue-scripts/dependencias_scala/jedis-combined-1.0.jar"
+ '--extra-jars': 's3://datalake-glue-scripts/dependencias_scala/jedis-combined-1.0.jar',
