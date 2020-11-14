@@ -1,45 +1,33 @@
 {
     "Job": {
-        "Name": "bb30_carga_proposta_redis_preparacao",
-        "Role": "arn:aws:iam::909530209831:role/Brasilseg-Glue-Role",
-        "CreatedOn": 1600545275.208,
-        "LastModifiedOn": 1600546180.673,
+        "Name": "asw_carga_redis_ab_seguros_db_historico_etl",
+        "Role": "arn:aws:iam::646025261134:role/Brasilseg-Glue-Role",
+        "CreatedOn": 1605379515.088,
+        "LastModifiedOn": 1605379515.088,
         "ExecutionProperty": {
-            "MaxConcurrentRuns": 11
+            "MaxConcurrentRuns": 30
         },
         "Command": {
             "Name": "glueetl",
-            "ScriptLocation": "s3://datalake-glue-scripts/carga_historica/carga_redis/carga_propostas_preparacao_cat.scala",
+            "ScriptLocation": "s3://datalake-glue-scripts/carga_historica/carga_redis/carga_propostas_etl2_ab_historica_old.scala",
             "PythonVersion": "2"
         },
         "DefaultArguments": {
             "--TempDir": "s3://aws-glue-temporary-909530209831-us-east-1/admin",
-            "--bucket_path": "s3://brasilseg-segbr-extracao",
-            "--categories": "vida;residencial;prestamista;rural_ab;rural_abs",
             "--class": "GlueApp",
-            "--database": "abs_mobile;ab_mobile",
-            "--enable-continuous-cloudwatch-log": "true",
-            "--enable-s3-parquet-optimized-committer": "true",
-            "--enable-spark-ui": "true",
-            "--environment": "aws",
-            "--extra-files": "s3://datalake-glue-scripts/estrutura_query/queries_propostas_unificada_cat.json",
-            "--extra-jars": "s3://datalake-glue-scripts/dependencias_scala/dependencias.jar",
+            "--extra-files": "s3://datalake-glue-scripts/estrutura_query/proposta_ab_redshift_queries-documentos.json",
+            "--extra-jars": "s3://datalake-glue-scripts/dependencias_scala/combined_v10.jar",
             "--job-bookmark-option": "job-bookmark-disable",
-            "--job-language": "scala",
-            "--queries": "queries_propostas_unificada_cat.json",
-            "--redshift_credentials": "prd/redshiftDW",
-            "--redshift_key_path": "/chaves-redis/%s/proposta",
-            "--spark-event-logs-path": "s3://brasilseg-glue-log/bb30_carga_proposta_redis_preparacao/",
-            "--type": "increment"
+            "--job-language": "scala"
         },
         "Connections": {
             "Connections": [
                 "dw_db"
             ]
         },
-        "MaxRetries": 0,
+        "MaxRetries": 3,
         "AllocatedCapacity": 11,
-        "Timeout": 2880,
+        "Timeout": 10000,
         "MaxCapacity": 11.0,
         "WorkerType": "G.2X",
         "NumberOfWorkers": 5,

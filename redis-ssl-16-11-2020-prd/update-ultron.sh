@@ -2,6 +2,8 @@ profile=$1
 
 echo "Proposta BB3.0 ..."
 
+cd script
+
 #Todo validar se isso pode subir
 ./glue.sh job-update-parameters --job-name bb30_carga_proposta_redis_preparacao --parameters "{'Command':{'ScriptLocation':'s3://datalake-glue-scripts/carga_historica/carga_redis/carga_propostas_preparacao.scala'},'DefaultArguments':{'--extra-jars': 's3://datalake-glue-scripts/dependencias_scala/jedis-combined-1.0.jar','--system':'segbr;segbr;ultron','--database':'ab_mobile;abs_mobile;ultron_apolice','--categories':'vida;residencial;rural_ab;rural_abs;prestamista;ultron_residencial','--redshift_key_path':'#deprecated'}}" --region us-east-1 --profile $profile
 ./glue.sh job-update-parameters --job-name bb30_carga_proposta_redis_home --parameters "{'DefaultArguments':{'--category':'vida,residencial,rural_ab,rural_abs,prestamista,ultron_residencial'}}" --region us-east-1 --profile $profile
