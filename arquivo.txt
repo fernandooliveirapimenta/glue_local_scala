@@ -1,0 +1,6 @@
+,'--enable-s3-parquet-optimized-committer':'true'
+,'GlueVersion': '2.0'
+
+
+
+
