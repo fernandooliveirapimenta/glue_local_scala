@@ -1,43 +1,38 @@
 {
     "Job": {
-        "Name": "asw_carga_redis_ab_seguros_db_incremental_propostas",
-        "Role": "arn:aws:iam::057872281239:role/Brasilseg-GlueRole",
-        "CreatedOn": 1596136737.298,
-        "LastModifiedOn": 1603996945.221,
+        "Name": "bb30_carga_proposta_redis_preparacao",
+        "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+        "CreatedOn": 1597264703.423,
+        "LastModifiedOn": 1604714124.107,
         "ExecutionProperty": {
             "MaxConcurrentRuns": 1
         },
         "Command": {
             "Name": "glueetl",
-            "ScriptLocation": "s3://datalake-glue-scripts-hml/carga_historica/carga_redis/asw_carga_unificada_redis_ab_seguros_db.scala",
+            "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_preparacao.scala",
             "PythonVersion": "2"
         },
         "DefaultArguments": {
             "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+            "--bucket_path": "s3://dev-brasilseg-segbr-extracao",
+            "--categories": "vida;residencial;rural_ab;rural_abs;prestamista;ultron_residencial",
             "--class": "GlueApp",
-            "--conf": "spark.driver.maxResultSize=10g",
+            "--database": "ab;abs;ultron_apolice",
             "--enable-continuous-cloudwatch-log": "true",
-            "--enable-s3-parquet-optimized-committer ": "true",
-            "--enable-spark-ui": "true",
             "--environment": "aws",
-            "--executor_memory": "10g",
-            "--extra-files": "s3://datalake-glue-scripts-hml/estrutura_query/proposta_ab_redshift_queries.json",
-            "--extra-jars": "s3://datalake-glue-scripts-hml/dependencias_scala/jedis-combined-1.0.jar",
+            "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+            "--extra-jars": "s3://dev-brasilseg-segbr-extracao/dependencias/combined_v10.jar",
             "--job-bookmark-option": "job-bookmark-disable",
             "--job-language": "scala",
-            "--query": "proposta_ab_redshift_queries.json",
-            "--redis_auth": "/brseg/elasticache/brasilseg-redis-aviso/token",
-            "--redis_database": "12",
-            "--redis_host": "/brseg/elasticache/brasilseg-redis-aviso/endpoint",
-            "--redis_port": "/brseg/elasticache/brasilseg-redis-aviso/porta",
-            "--redis_ssl": "true",
-            "--redshift_credentials": "hml/redshiftDW",
-            "--spark-event-logs-path": "s3://hml-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_incremental_propostas/",
-            "--type": "incremental"
+            "--queries": "queries_propostas_unificada_cat.json",
+            "--redshift_credentials": "dev/redshiftDW",
+            "--redshift_key_path": "#deprecated",
+            "--system": "segbr;segbr;ultron",
+            "--type": "increment"
         },
         "Connections": {
             "Connections": [
-                "redshift_dw"
+                "Redshift_DataLake"
             ]
         },
         "MaxRetries": 0,

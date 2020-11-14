@@ -9,6 +9,11 @@ aws glue get-job --job-name bb30_carga_proposta_redis_home --region us-east-1 --
 aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_historico --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_historico --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
 aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_incremental --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_incremental --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
 
+aws glue get-job --job-name bb30_carga_proposta_redis_preparacao \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_preparacao \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
 aws glue get-job --job-name bb30_carga_proposta_redis_residencial_historico \
 --region us-east-1 --profile dev --output json > dev.txt && \
  aws glue get-job --job-name bb30_carga_proposta_redis_residencial_historico \
