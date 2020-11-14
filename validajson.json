@@ -1,23 +1,11 @@
-{
-  "Command": {
-    "ScriptLocation": "s3://datalake-glue-scripts/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala"
-  },
-  "DefaultArguments": {
-    "--extra-jars": "s3://datalake-glue-scripts/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
-    "--extra-files": "s3//datalake-glue-scripts/estrutura_tabela/estrutura_assistencia_abs_mobile.json,s3://datalake-glue-scripts/estrutura_query/AssistenciaABSQuerys.json",
-    "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
-    "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
-    "--redis_ssl": "true",
-    "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
-    "--environment": "aws",
-    "--database": "abs",
-    "--redshift_schema": "spectrum_assistencia_db_abs_mobile",
-    "--schema": "estrutura_assistencia_abs_mobile.json",
-    "--queries": "AssistenciaABSQuerys.json",
-    "--enable-spark-ui": "true",
-    "--conf": "spark.driver.maxResultSize=10g",
-    "--spark-event-logs-path": "s3://brasilseg-glue-log/carga_assistencia_redis_abs_mobile_assistencia_db_incremental/",
-    "--enable-s3-parquet-optimized-committer": "true"
-  },
-  "GlueVersion": "2.0"
-}
+
+
+
+
+
+
+
+
+
+
+
