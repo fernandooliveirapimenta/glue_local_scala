@@ -1,0 +1,3655 @@
+{
+    "Jobs": [
+        {
+            "Name": "Database_Record_Comparator",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1599765156.822,
+            "LastModifiedOn": 1599767895.863,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 5
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/outros/database_record_comparator/database_record_comparator.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--database": "seguros_db",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/etl1_record_comparator/",
+                "--tables": "tb1,tb2, tb3"
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 300,
+            "MaxCapacity": 10.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "Simulador_ETL_Dynamodb_Datalake",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1590007431.236,
+            "LastModifiedOn": 1590008131.282,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-simulador-glue/script/ETL_s3Json_DataLake.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--BUCKET_DATA_LAKE": "dev-brasilseg-simulador-data-lake",
+                "--BUCKET_EXTRACAO": "dev-brasilseg-simulador-extracao",
+                "--TempDir": "s3://dev-simulador-glue/temp",
+                "--class": "ETL_s3Json_DataLake",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-simulador-glue/json",
+                "--extra-jars": "s3://dev-simulador-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--type": "incremental"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "Simulador_ETL_Redshift_Redis",
+            "Description": "ETL responsÃ¡vel por migrar alguns dos dados utilizados pelos Simuladores do Redshift para o Redis",
+            "Role": "Brasilseg-GlueRole",
+            "CreatedOn": 1597536715.819,
+            "LastModifiedOn": 1597536715.819,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-simulador-glue/script/ETL_Redshift_Redis.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-simulador-glue/temp",
+                "--extra-files": "s3://dev-simulador-glue/json/etl_redshift_redis_queries.json",
+                "--extra-py-files": "s3://dev-simulador-glue/lib/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 450,
+            "MaxCapacity": 10.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "arquitetura_script",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1596663740.072,
+            "LastModifiedOn": 1596667839.957,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/arquitetura_script",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "ab",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--bucketOrigem": "dev-brasilseg-segbr-extracao",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-spark-ui": "true",
+                "--extra-py-files": "s3://dev-brasilseg-segbr-extracao/estrutura_tabelas/estrutura_tabelas.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--secretRedShift": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/arquitetura_script"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_data_lake_ab_seguros_db_aviso_incremental_ complemento_json",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1592704407.891,
+            "LastModifiedOn": 1596825048.38,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/asw/carga_sinistro_datalake_ab_seguros_db_incremental.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--read_compressed_csv": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_aviso",
+                "--redshift_table_prefix": "null",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/asw/incremental/estrutura_json_complemento.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_aviso",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_aviso",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_data_lake_ab_seguros_db_aviso_incremental_ complemento_json",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis-aviso/sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_aviso",
+                "--type": "incremental",
+                "--use_dbo": "true"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_data_lake_ab_seguros_db_aviso_incremental_json",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1592193840.446,
+            "LastModifiedOn": 1596825063.945,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/asw/carga_sinistro_datalake_ab_seguros_db_incremental.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--read_compressed_csv": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_aviso",
+                "--redshift_table_prefix": "null",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/asw/incremental/estrutura_json.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_aviso",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_aviso",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_data_lake_ab_seguros_db_aviso_incremental_json",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis-aviso/proposta",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_aviso",
+                "--type": "incremental",
+                "--use_dbo": "true"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_data_lake_ab_seguros_db_aviso_incremental_proposta_json",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1592863850.124,
+            "LastModifiedOn": 1596825111.155,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/asw/carga_sinistro_datalake_ab_seguros_db_incremental.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--read_compressed_csv": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_aviso",
+                "--redshift_table_prefix": "null",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/asw/incremental/estrutura_json_proposta.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_aviso",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_aviso",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_data_lake_ab_seguros_db_aviso_incremental_proposta_json",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis-aviso/proposta",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_aviso",
+                "--type": "incremental",
+                "--use_dbo": "true"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_data_lake_ab_seguros_db_aviso_incremental_sinistro_json",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1592864145.642,
+            "LastModifiedOn": 1596825141.248,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/asw/carga_sinistro_datalake_ab_seguros_db_incremental.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--read_compressed_csv": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_aviso",
+                "--redshift_table_prefix": "null",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/asw/incremental/estrutura_json_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_aviso",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_aviso",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_data_lake_ab_seguros_db_aviso_incremental_sinistro_json",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis-aviso/sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_aviso",
+                "--type": "incremental",
+                "--use_dbo": "true"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_data_lake_ab_seguros_db_historico_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1590967242.961,
+            "LastModifiedOn": 1596825213.139,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 100
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/asw/carga_sinistro_datalake_ab_seguros_db_incremental.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--read_compressed_csv": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_aviso",
+                "--redshift_table_prefix": "null",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/asw/incremental/estrutura_json.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_aviso_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_aviso_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_data_lake_ab_seguros_db_historico_etl/",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis-aviso/sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_aviso",
+                "--type": "full",
+                "--use_dbo": "false"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 10000,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_redis_ab_seguros_db_historico_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1591018647.095,
+            "LastModifiedOn": 1603120908.881,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 100
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/asw_carga_unificada_redis_ab_seguros_db.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-spark-ui": "true",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/proposta_ab_redshift_queries-documentos-3-100.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_historico_etl/"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 10000,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_redis_ab_seguros_db_incremental_propostas_old",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1592922575.83,
+            "LastModifiedOn": 1603119138.58,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/asw_carga_unificada_redis_ab_seguros_db.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--executor_memory": "10g",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/proposta_ab_redshift_queries.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--query": "proposta_ab_redshift_queries.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis-aviso/token",
+                "--redis_database": "12",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis-aviso/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis-aviso/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_incremental_propostas_old",
+                "--type": "incremental"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_redis_ab_seguros_db_incremental_propostas_por_cpf",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1593643758.415,
+            "LastModifiedOn": 1596825328.59,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/asw/carga_proposta_redis_ab_seguros_db_historico_query.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-spark-ui": "true",
+                "--executor_memory": "10g",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/proposta_ab_redshift_queries_cpf.json",
+                "--extra-jars": "s3://dev-brasilseg-segbr-extracao/dependencias/combined_v10.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--query": "proposta_ab_redshift_queries_cpf.json",
+                "--redis_database": "12",
+                "--redis_host": "brasilseg-redis.dxgpxg.0001.sae1.cache.amazonaws.com",
+                "--redis_port": "6379",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_incremental_propostas_por_cpf/",
+                "--type": "incremental"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "asw_carga_redis_ab_seguros_db_incremental_sinistros_old",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1593021492.117,
+            "LastModifiedOn": 1603119212.455,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/asw_carga_unificada_redis_ab_seguros_db.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--executor_memory": "10g",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/sinistro_ab_redshift_queries.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--query": "sinistro_ab_redshift_queries.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis-aviso/token",
+                "--redis_database": "12",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis-aviso/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis-aviso/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_incremental_sinistros_old",
+                "--type": "incremental"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_ab_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717849.11,
+            "LastModifiedOn": 1605009288.117,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_ab_mobile.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaABQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_AB/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaABQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/assistencia",
+                "--redshift_schema": "spectrum_assistencia_db_ab_mobile",
+                "--schema": "estrutura_assistencia_ab_mobile.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_ab_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_ab_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717960.026,
+            "LastModifiedOn": 1605010458.948,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_ab_mobile.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaABQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_AB/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaABQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/assistencia",
+                "--redshift_schema": "spectrum_assistencia_db_ab_mobile",
+                "--schema": "estrutura_assistencia_ab_mobile.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_ab_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_abs_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604718060.475,
+            "LastModifiedOn": 1605009179.352,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_abs_mobile.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaABSQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaABSQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_assistencia_db_abs_mobile",
+                "--schema": "estrutura_assistencia_abs_mobile.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_abs_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_abs_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604718149.735,
+            "LastModifiedOn": 1605010759.157,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_abs_mobile.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaABSQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaABSQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/abs_mobile/assistencia",
+                "--redshift_schema": "spectrum_assistencia_db_abs_mobile",
+                "--schema": "estrutura_assistencia_abs_mobile.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_abs_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_ultron_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605036138.233,
+            "LastModifiedOn": 1605271714.309,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ultron",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "true",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_ultron.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaUltronQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaUltronQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ultron/assistencia",
+                "--redshift_schema": "spectrum_assistencia_ultron",
+                "--schema": "estrutura_assistencia_ultron.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_assistencia_redis_ultron_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605215648.508,
+            "LastModifiedOn": 1605272516.923,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/assistencia_db_carga_redis_unificada.scala",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ultron",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "true",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_ultron.json,s3://datalake-glue-scripts-dev/estrutura_query/AssistenciaUltronQuerys.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-dev/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+                "--filter": "%CARGA_BB_3.0%",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "AssistenciaUltronQuerys.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "2",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ultron/assistencia",
+                "--redshift_schema": "spectrum_assistencia_ultron",
+                "--schema": "estrutura_assistencia_ultron.json",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_assistencia_redis_ultron_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "WorkerType": "Standard",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "bb30_carga_chaves_fortes_ab",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604692240.668,
+            "LastModifiedOn": 1604692240.668,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/etl15_chave_forte.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--databases": "ab;ab;ab;ab",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--entities": "assistencia;proposta;sinistro;evento_sinistro",
+                "--environment": "aws",
+                "--job-language": "scala",
+                "--keys": "plano_assistencia_id;proposta_id;sinistro_id;evento_sinistro_id",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--schemas": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_ab_mobile.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_chaves_fortes_abs",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604692249.343,
+            "LastModifiedOn": 1605210834.749,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/etl15_chave_forte.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--database": "abs",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--entities": "assistencia;proposta;sinistro;evento_sinistro",
+                "--environment": "aws",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--keys": "plano_assistencia_id;proposta_id;sinistro_id;evento_sinistro_id",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--schemas": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia_abs_mobile.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_chaves_fortes_ultron",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604693070.105,
+            "LastModifiedOn": 1605302030.317,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/etl15_chave_forte.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "GlueApp",
+                "--database": "ultron",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--entities": "assistencia;proposta;evento_sinistro",
+                "--environment": "aws",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--keys": "id_oferta_plano;id_proposta;id_evento_timeline",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--schemas": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_assistencia_ultron.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta_ultron.json;s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro_ultron.json",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/%s/%s"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_ab_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604716775.349,
+            "LastModifiedOn": 1605323361.155,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_ab_seguros_db_spark.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "9",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_ab_historico/",
+                "--type": "full",
+                "redshift_key_path": ""
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_ab_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604716941.049,
+            "LastModifiedOn": 1604717002.233,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_ab_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_ab_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_abs_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717095.077,
+            "LastModifiedOn": 1604718792.418,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_abs_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "9",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_abs_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_abs_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717217.721,
+            "LastModifiedOn": 1604717242.367,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_abs_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_abs_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_ultron_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605029075.599,
+            "LastModifiedOn": 1605029208.911,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_ultron.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_ultron_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_evento_sinistro_redis_ultron_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605033924.719,
+            "LastModifiedOn": 1605033924.719,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_evento_sinistro_redis_ultron.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_evento_sinistro_redis_ultron_historico/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_home",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1595348136.756,
+            "LastModifiedOn": 1605222938.981,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "vida,residencial,rural_ab,rural_abs,prestamista,residencial_ultron",
+                "--class": "GlueApp",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_home/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_preparacao",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597264703.423,
+            "LastModifiedOn": 1604714124.107,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_preparacao.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--bucket_path": "s3://dev-brasilseg-segbr-extracao",
+                "--categories": "vida;residencial;rural_ab;rural_abs;prestamista;ultron_residencial",
+                "--class": "GlueApp",
+                "--database": "ab;abs;ultron_apolice",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--environment": "aws",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://dev-brasilseg-segbr-extracao/dependencias/combined_v10.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "#deprecated",
+                "--system": "segbr;segbr;ultron",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_prestamista_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1596485894.606,
+            "LastModifiedOn": 1605218514.058,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "prestamista",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_prestamista_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_prestamista_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1596653704.804,
+            "LastModifiedOn": 1605030416.539,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "prestamista",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "/chaves-redis/ab_mobile/proposta",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_prestamista_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_residencial_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1594993491.958,
+            "LastModifiedOn": 1605218571.575,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "residencial",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_residencial_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_residencial_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1594996639.859,
+            "LastModifiedOn": 1605030654.279,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "residencial",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "/chaves-redis/abs_mobile/proposta",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_residencial_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_residencial_ultron_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605032035.957,
+            "LastModifiedOn": 1605214545.732,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "residencial_ultron",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_residencial_ultron_historico",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 5,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_residencial_ultron_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605032476.838,
+            "LastModifiedOn": 1605187897.211,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "residencial_ultron",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_residencial_ultron_incremental",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_rural_ab_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597177707.29,
+            "LastModifiedOn": 1605216381.152,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "rural_ab",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_rural_ab_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_rural_ab_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597266348.976,
+            "LastModifiedOn": 1605030787.967,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "rural_ab",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "/chaves-redis/ab_mobile/proposta",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_rural_ab_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_rural_abs_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597178074.651,
+            "LastModifiedOn": 1605216935.777,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "rural_abs",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_rural_abs_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_rural_abs_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597266677.466,
+            "LastModifiedOn": 1605030984.371,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "rural_abs",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "/chaves-redis/abs_mobile/proposta",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_rural_abs_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_vida_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1595954161.184,
+            "LastModifiedOn": 1605218663.003,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "vida",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_vida_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_proposta_redis_vida_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1595346958.006,
+            "LastModifiedOn": 1605031059.319,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_propostas_unificada_cat.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--category": "vida",
+                "--class": "GlueApp",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "dev",
+                "--extra-files": "s3://datalake-glue-scripts-dev/estrutura_query/queries_propostas_unificada_cat.json",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_scala/jedis-combined-1.0.jar",
+                "--home": "false",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--queries": "queries_propostas_unificada_cat.json",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "7",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_key_path": "/chaves-redis/abs_mobile/proposta",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_proposta_redis_vida_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_sinistro_redis_ab_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717352.0,
+            "LastModifiedOn": 1604717401.072,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_sinistro_redis_ab_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_sinistro_redis_ab_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_sinistro_redis_ab_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717470.888,
+            "LastModifiedOn": 1604717495.624,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_sinistro_redis_ab_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_sinistro_redis_ab_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_sinistro_redis_abs_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717582.594,
+            "LastModifiedOn": 1604717610.275,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_sinistro_redis_abs_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://hml-brasilseg-glue-log/bb30_carga_sinistro_redis_abs_historico/",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "bb30_carga_sinistro_redis_abs_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604717675.849,
+            "LastModifiedOn": 1604717712.669,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_redis/carga_sinistro_redis_abs_seguros_db.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--environment": "aws",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/dependencias_python/redis.zip",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redis_auth": "/brseg/elasticache/brasilseg-redis/token",
+                "--redis_db": "3",
+                "--redis_host": "/brseg/elasticache/brasilseg-redis/endpoint",
+                "--redis_port": "/brseg/elasticache/brasilseg-redis/porta",
+                "--redis_ssl": "true",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/bb30_carga_sinistro_redis_abs_incremental/",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 5,
+            "Timeout": 2880,
+            "MaxCapacity": 5.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_assistencia_data_lake_ab_assistencia_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1598550512.124,
+            "LastModifiedOn": 1601479995.555,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_assistencia.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_assistencia_data_lake_ab_assistencia_db_incremental",
+                "--strong_entity": "plano_assistencia_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/assistencia",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_assistencia_data_lake_ab_assistencia_db_mobile",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1598563073.213,
+            "LastModifiedOn": 1598563073.213,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf ": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_assistencia.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_assistencia_data_lake_ab_assistencia_db_mobile/",
+                "--strong_entity": "plano_assistencia_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_assistencia_data_lake_abs_assistencia_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1570037986.165,
+            "LastModifiedOn": 1596826595.747,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_assistencia.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_assistencia_data_lake_abs_assistencia_db/",
+                "--strong_entity": "plano_assistencia_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_assistencia_data_lake_abs_assistencia_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1570038216.516,
+            "LastModifiedOn": 1596826626.721,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_assistencia.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_assistencia_data_lake_abs_assistencia_db_incremental",
+                "--strong_entity": "plano_assistencia_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/abs_mobile/assistencia",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_data_lake_seguros_db_proposta_ab_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1569851823.661,
+            "LastModifiedOn": 1596826748.537,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_historica/carga_data_lake/carga_data_lake_seguros_db_proposta_ab_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "ab",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--bucketOrigem": "dev-brasilseg-segbr-extracao",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--extra-py-files": "s3://datalake-glue-scripts-dev/estrutura_tabela/estrutura_tabelas_completa.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_data_lake_seguros_db_proposta_ab_historico/"
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_data_lake_seguros_db_proposta_abs_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1569852075.476,
+            "LastModifiedOn": 1596826781.688,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/carga_data_lake_seguros_db_proposta_abs_historico",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "abs",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--bucketOrigem": "dev-brasilseg-segbr-extracao",
+                "--conf": "spark.driver.memory=10g",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--extra-py-files": "s3://dev-brasilseg-segbr-extracao/estrutura_tabelas/estrutura_tabelas.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_data_lake_seguros_db_proposta_abs_historico/"
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_evento_sinistro_datalake_ab_mobile_seguros_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597156783.022,
+            "LastModifiedOn": 1597156783.022,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_evento_sinistro_datalake_ab_mobile_seguros_db/",
+                "--strong_entity": "evento_sinistro_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 20,
+            "Timeout": 2880,
+            "MaxCapacity": 20.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "2.0"
+        },
+        {
+            "Name": "carga_evento_sinistro_datalake_ab_mobile_seguros_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1597157308.562,
+            "LastModifiedOn": 1597781173.777,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_evento_sinistro_datalake_ab_mobile_seguros_db_incremental/",
+                "--strong_entity": "evento_sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/evento_sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_evento_sinistro_datalake_abs_seguros_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1571255613.849,
+            "LastModifiedOn": 1596826850.791,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_evento_sinistro_datalake_abs_seguros_db/",
+                "--strong_entity": "evento_sinistro_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_evento_sinistro_datalake_abs_seguros_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1571255827.415,
+            "LastModifiedOn": 1596826879.896,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_evento_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_evento_sinistro_datalake_abs_seguros_db_incremental/",
+                "--strong_entity": "evento_sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/abs_mobile/evento_sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_proposta_datalake_ab_mobile_seguros_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1595354130.462,
+            "LastModifiedOn": 1596827063.891,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_proposta_datalake_ab_mobile_seguros_db/",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.2X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_proposta_datalake_ab_mobile_seguros_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1595354934.235,
+            "LastModifiedOn": 1602020423.179,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--extra-jars": "s3://datalake-glue-scripts-dev/dependencias_python/RedshiftJDBC42-no-awssdk-1.2.45.1069.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_proposta_datalake_ab_mobile_seguros_db_incremental/",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/proposta",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_proposta_datalake_abs_seguros_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1568992461.497,
+            "LastModifiedOn": 1596827141.978,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_proposta_datalake_abs_seguros_db/",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_proposta_datalake_abs_seguros_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1568992463.048,
+            "LastModifiedOn": 1596827180.234,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 10
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.maxResultSize=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_proposta.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_proposta_datalake_abs_seguros_db_incremental/",
+                "--strong_entity": "proposta_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/abs_mobile/proposta",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_sinistro_datalake_ab_mobile_seguros_db_historico",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1585852225.348,
+            "LastModifiedOn": 1596827836.049,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf ": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_sinistro_datalake_ab_mobile_seguros_db_historico/",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_sinistro_datalake_ab_mobile_seguros_db_historico_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1587581630.594,
+            "LastModifiedOn": 1596827871.415,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "ab_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_ab_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/ab_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/ab_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_sinistro_datalake_ab_mobile_seguros_db_historico_incremental/",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/ab_mobile/sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/ab_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_sinistro_datalake_abs_seguros_db",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1571255357.648,
+            "LastModifiedOn": 1596827900.42,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile_completa",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile_completa",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_sinistro_datalake_abs_seguros_db/",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "null",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "full"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "carga_sinistro_datalake_abs_seguros_db_incremental",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1571254955.529,
+            "LastModifiedOn": 1596827932.293,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://datalake-glue-scripts-dev/carga_incremental/carga_data_lake/novo_etl1_sem_historico.py",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--conf": "spark.driver.memory=10g",
+                "--database": "abs_mobile",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--redshift_credentials": "dev/redshiftDW",
+                "--redshift_schema": "spectrum_{$table}_abs_mobile",
+                "--region_name": "us-east-1",
+                "--schema_path": "s3://datalake-glue-scripts-dev/estrutura_tabela/bb30/estrutura_sinistro.json",
+                "--source_path": "s3://dev-brasilseg-segbr-extracao/abs_extracao_mobile",
+                "--source_proccess_path": "s3://dev-brasilseg-segbr-extracao/abs_processados_mobile",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/carga_sinistro_datalake_abs_seguros_db_incremental/",
+                "--strong_entity": "sinistro_id",
+                "--target_key_path": "s3://dev-brasilseg-segbr-extracao/chaves-redis/abs_mobile/sinistro",
+                "--target_path": "s3://dev-brasilseg-data-lake/abs_mobile",
+                "--type": "increment"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 21,
+            "Timeout": 2880,
+            "MaxCapacity": 21.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 20,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "remover_duplicidade_data_lake",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1569261680.122,
+            "LastModifiedOn": 1596828120.149,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/remover_duplicidade_ab",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "ab",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--extra-py-files": "s3://brasilseg-segbr-extracao/estrutura_tabelas/estrutura_tabelas.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--secretRedShift": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/remover_duplicidade_data_lake/"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "script_teste_cliente_tb",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1568664320.975,
+            "LastModifiedOn": 1568666749.268,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/script_teste_cliente_tb",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "abs",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--bucketOrigem": "dev-brasilseg-segbr-extracao",
+                "--extra-py-files": "s3://dev-brasilseg-segbr-extracao/estrutura_tabelas/estrutura_tabelas.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--secretRedShift": "dev/redshiftDW"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "segbr_csv_orc_apolice_ab",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1563389536.851,
+            "LastModifiedOn": 1563918459.428,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/segbr_csv_orc_apolice",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python"
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 60,
+            "MaxCapacity": 10.0
+        },
+        {
+            "Name": "subvencao_apolices_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600788049.259,
+            "LastModifiedOn": 1600788049.259,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_Redshift_sqlserver_apolices_ab_sparkPlus.scala_22092020_121959",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_Redshift_sqlserver_apolices_ab_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/apolices_ab/Apolices_ab_atualizarProposta.sql,s3://dev-subvencao-glue/queries/apolices_ab/Apolices_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/apolices_ab/Apolices_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/apolices_ab/Apolices_ab_sparkPlus_obterPropostaPorId.sql,s3://dev-subvencao-glue/queries/apolices_ab/Apolices_ab_sparkPlus_obterStatusPropostaPorId.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_coberturas_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1601506856.055,
+            "LastModifiedOn": 1601506856.055,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_coberturas_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_coberturas_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/coberturas/Coberturas_sparkPlus_delete.sql,s3://dev-subvencao-glue/queries/coberturas/Coberturas_sparkPlus_insert.sql,s3://dev-subvencao-glue/queries/coberturas/Coberturas_sparkPlus_obterPorId.sql,s3://dev-subvencao-glue/queries/coberturas/Coberturas_sparkPlus_obterRedshift.sql,s3://dev-subvencao-glue/queries/coberturas/Coberturas_sparkPlus_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_coberturas_propostas_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1601507873.439,
+            "LastModifiedOn": 1601507873.439,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_coberturas_propostas_ab_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_coberturas_propostas_ab_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_insert.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_obterPorIdPropostaIdCobertura.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_obterRedshift_sparkPlus_CobertObjRisco.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_ab/CoberturasProposta_ab_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_coberturas_propostas_abs_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600667772.511,
+            "LastModifiedOn": 1600780612.731,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_coberturas_x_propostas_abs_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_RedShift_sqlserver_coberturas_x_propostas_abs_sparkPlus",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_insert.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_obterPorIdPropostaIdCobertura.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_obterRedshift_sparkPlus_CobertObjRisco.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/coberturas_propostas_abs/CoberturasProposta_abs_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_culturas_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1603745577.073,
+            "LastModifiedOn": 1603745577.073,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_Redshift_sqlserver_culturas_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_Redshift_sqlserver_culturas_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/culturas/Culturas_insert_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_update_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_obterPorId_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_delete_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_obterRedshift_sparkPlus.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_culturas_personalizadas_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600469364.724,
+            "LastModifiedOn": 1600469364.724,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_Redshift_sqlserver_culturas_personalizadas_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_Redshift_sqlserver_culturas_personalizadas_sparkPlus",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-subvencao-glue/queries/culturas_personalizadas/CulturasPersonalizadas_delete_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas_personalizadas/CulturasPersonalizadas_insert_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas_personalizadas/CulturasPersonalizadas_obterPorId_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas_personalizadas/CulturasPersonalizadas_obterRedshift_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas_personalizadas/CulturasPersonalizadas_update_sparkPlus.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_culturas_teste_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600719622.612,
+            "LastModifiedOn": 1600719622.612,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_Redshift_sqlserver_culturas_sparkPlus.scala_21092020_171933",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_Redshift_sqlserver_culturas_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/culturas/Culturas_delete_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_insert_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_obterPorId_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_obterRedshift_sparkPlus.sql,s3://dev-subvencao-glue/queries/culturas/Culturas_update_sparkPlus.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_massificadas_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1604950796.176,
+            "LastModifiedOn": 1604950796.176,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_propostas_massificadas_ab_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_propostas_massificadas_ab_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_insert.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_ClienteProp.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_EnderecoCorrespondencia.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_EnderecoRisco.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioGrauLat.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioGrauLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioMinutoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioMinutoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioNmProp.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioNrAnimais.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioProdEstimada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioProdSegurada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioSegundoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioSegundoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioTxArea.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_update.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_SbsSgroAgrlHist.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_massificadas_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600475096.246,
+            "LastModifiedOn": 1600475096.246,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_propostas_massificadas_ab_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_RedShift_sqlserver_propostas_massificadas_ab_sparkPlus",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_insert.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_ClienteProp.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_EnderecoCorrespondencia.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_EnderecoRisco.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioGrauLat.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioGrauLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioMinutoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioMinutoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioNmProp.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioNrAnimais.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioProdEstimada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioProdSegurada.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioSegundoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioSegundoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_QuestionarioTxArea.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/propostas_massificadas_ab/Propostas_massificadas_ab_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_pecuario_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605027926.723,
+            "LastModifiedOn": 1605027926.723,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_propostas_pecuario_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_propostas_pecuario_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_insert.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_ClienteProp.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_EnderecoCorrespondencia.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_EnderecoRisco.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioGrauLat.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioGrauLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioMinutoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioMinutoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioSegundoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioSegundoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_update.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_QuestionarioNmProp.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_pecuario_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600647396.178,
+            "LastModifiedOn": 1600665590.731,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_Redshift_sqlserver_propostas_pecuario_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_Redshift_sqlserver_propostas_pecuario_sparkPlus",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_insert.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_ClienteProp.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_EnderecoCorrespondencia.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_EnderecoRisco.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_obterRedshift_sparkPlus_SeguroEspAgricola.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioGrauLat.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioGrauLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioMinutoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioMinutoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioSegundoLatitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_obterRedshift_sparkPlus_QuestionarioSegundoLongitude.sql,s3://dev-subvencao-glue/queries/propostas_pecuario_ab/Propostas_pecuario_ab_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_personalizadas_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605033954.841,
+            "LastModifiedOn": 1605033954.841,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_propostas_personalizadas_ab_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_propostas_personalizadas_ab_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_insert.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_Cliente.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_EnderecoCorresp.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_BemLavoura.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_BemGeo.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_obterRedshift_sparkPlus_RiscoBem.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_ab/Propostas_personalizadas_ab_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_propostas_personalizadas_abs_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1605040251.284,
+            "LastModifiedOn": 1605040251.284,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_propostas_personalizadas_abs_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_propostas_personalizadas_abs_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_insert.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterPorId.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_Apolice.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_Cliente.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_EnderecoCorresp.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_Produto.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_PropAdesao.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_PropFechada.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_Proposta.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_Proposta1.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_BemLavoura.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_BemGeo.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_obterRedshift_sparkPlus_RiscoBem.sql,s3://dev-subvencao-glue/queries/propostas_personalizadas_abs/Propostas_personalizadas_abs_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_sinistros_avisados_ab_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1602262644.202,
+            "LastModifiedOn": 1602262644.202,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_sinistros_avisados_ab_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://dev-subvencao-glue/temp",
+                "--class": "ETL_RedShift_sqlserver_sinistros_avisados_ab_sparkPlus",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--extra-files": "s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_insert.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterPorId.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_pgto_sinistro.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_pgto_sinistro_cobertura.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_proposta.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_sinistro.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_sinistro_estimativa.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_sinistro_evento.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_obterRedshift_sparkPlus_vistoria.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_ab/Sinistros_avisados_ab_update.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "subvencao_sinistros_avisados_abs_etl",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1598565650.484,
+            "LastModifiedOn": 1598587776.833,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://dev-subvencao-glue/script/ETL_RedShift_sqlserver_sinistros_avisados_abs_sparkPlus.scala",
+                "PythonVersion": "2"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--class": "ETL_RedShift_sqlserver_sinistros_avisados_abs_sparkPlus",
+                "--conf": "spark.driver.memory=10g",
+                "--extra-files": "s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterPorId.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_insert.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_update.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_pgto_sinistro.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_pgto_sinistro_cobertura.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_proposta.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_sinistro.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_sinistro_estimativa.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_sinistro_evento.sql,s3://dev-subvencao-glue/queries/sinistros_avisados_abs/Sinistros_avisados_abs_obterRedshift_sparkPlus_vistoria.sql",
+                "--extra-jars": "s3://dev-subvencao-glue/lib/etl_common_dependencies.jar",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "scala",
+                "--secretIdRedshift": "dev/redshiftDW",
+                "--secretIdSqlServer": "dev/rds/brsegd"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 11,
+            "Timeout": 2880,
+            "MaxCapacity": 11.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 10,
+            "GlueVersion": "1.0"
+        },
+        {
+            "Name": "teste_clone",
+            "Role": "arn:aws:iam::533865883733:role/Brasilseg-GlueRole",
+            "CreatedOn": 1600539542.492,
+            "LastModifiedOn": 1600539542.492,
+            "ExecutionProperty": {
+                "MaxConcurrentRuns": 1
+            },
+            "Command": {
+                "Name": "glueetl",
+                "ScriptLocation": "s3://aws-glue-scripts-533865883733-us-east-1/admin/remover_duplicidade_ab",
+                "PythonVersion": "3"
+            },
+            "DefaultArguments": {
+                "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+                "--base": "ab",
+                "--bucketDestino": "dev-brasilseg-data-lake",
+                "--enable-continuous-cloudwatch-log": "true",
+                "--enable-metrics": "",
+                "--enable-s3-parquet-optimized-committer": "true",
+                "--enable-spark-ui": "true",
+                "--extra-py-files": "s3://brasilseg-segbr-extracao/estrutura_tabelas/estrutura_tabelas.py",
+                "--job-bookmark-option": "job-bookmark-disable",
+                "--job-language": "python",
+                "--secretRedShift": "dev/redshiftDW",
+                "--spark-event-logs-path": "s3://dev-brasilseg-glue-log/remover_duplicidade_data_lake/"
+            },
+            "Connections": {
+                "Connections": [
+                    "Redshift_DataLake"
+                ]
+            },
+            "MaxRetries": 0,
+            "AllocatedCapacity": 10,
+            "Timeout": 2880,
+            "MaxCapacity": 10.0,
+            "GlueVersion": "1.0"
+        }
+    ]
+}

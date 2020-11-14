@@ -1,10 +1,13 @@
 Segue abaixo os procedimentos a serem executados no ambiente de produção:
 
+TAREFA 1
+- Aprovar a esteira de PRD datalake-glue-scripts
+
+TAREFA 2
 - Copiar o anexo update-bb30-avisoweb.sh, update-ultron.sh para a instância EC2 de Infra.
 
 - Conectar via SSh na intância EC2 de Infra.
 
 - Executar os scriptsabaixo de dentro da instância EC2 de Infra:
-
 ./update-bb30-avisoweb.sh <nome do profile de produção>
 ./update-ultron.sh <nome do profile de produção>

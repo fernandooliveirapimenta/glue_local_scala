@@ -3,6 +3,114 @@
 aws glue delete-job \
 --job-name bb30_carga_assistencia_redis_ultron_incremental --region us-east-1
 
+#proposta
+aws glue get-job --job-name bb30_carga_proposta_redis_home --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_home --region us-east-1 --profile cloudwatch --output json > prd.txt && diff -a --suppress-common-lines -y dev.txt prd.txt
+aws glue get-job --job-name bb30_carga_proposta_redis_home --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_home --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_historico --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_historico --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_incremental --region us-east-1 --profile dev --output json > dev.txt && aws glue get-job --job-name bb30_carga_proposta_redis_prestamista_incremental --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_residencial_historico \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_residencial_historico \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+*"--conf": "spark.driver.maxResultSize=10g"
+aws glue get-job --job-name bb30_carga_proposta_redis_residencial_incremental \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_residencial_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+,'--enable-s3-parquet-optimized-committer': 'true'
+aws glue get-job --job-name bb30_carga_proposta_redis_rural_ab_historico \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_rural_ab_historico \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_rural_ab_incremental \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_rural_ab_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_rural_abs_historico \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_rural_abs_historico \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_rural_abs_incremental \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_rural_abs_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_vida_historico \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_vida_historico \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name bb30_carga_proposta_redis_vida_incremental \
+--region us-east-1 --profile dev --output json > dev.txt && \
+ aws glue get-job --job-name bb30_carga_proposta_redis_vida_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+#evento
+
+aws glue get-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db_incremental \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_evento_sinistro_redis_abs_mobile_seguros_db_incremental \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_evento_sinistro_redis_abs_mobile_seguros_db_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+
+# Sinistro
+aws glue get-job --job-name carga_sinistro_redis_ab_mobile_seguros_db_historico \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_sinistro_redis_ab_seguros_db_historico \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_sinistro_redis_ab_mobile_seguros_db_incremental \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_sinistro_redis_ab_seguros_db_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db_incremental \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name carga_sinistro_redis_abs_mobile_seguros_db_incremental \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+# Aviso Web
+aws glue get-job --job-name asw_carga_redis_ab_seguros_db_incremental_propostas \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name asw_carga_redis_ab_seguros_db_incremental_async_proposta \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name asw_carga_redis_ab_seguros_db_incremental_sinistros \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name asw_carga_redis_ab_seguros_db_incremental_async_sinistro \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
+aws glue get-job --job-name asw_carga_redis_ab_seguros_db_historico \
+--region us-east-1 --profile hml --output json > dev.txt && \
+ aws glue get-job --job-name asw_carga_redis_ab_seguros_db_historico_etl \
+  --region us-east-1 --profile cloudwatch --output json > prd.txt && vimdiff dev.txt prd.txt
+
 #bb30_carga_assistencia_redis_ultron_historico
     #full
     aws glue create-job \

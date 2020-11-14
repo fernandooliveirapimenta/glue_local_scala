@@ -1,0 +1,45 @@
+{
+    "Job": {
+        "Name": "asw_carga_redis_ab_seguros_db_incremental_async_proposta",
+        "Role": "arn:aws:iam::909530209831:role/Brasilseg-Glue-Role",
+        "CreatedOn": 1593053067.279,
+        "LastModifiedOn": 1600109230.129,
+        "ExecutionProperty": {
+            "MaxConcurrentRuns": 1
+        },
+        "Command": {
+            "Name": "glueetl",
+            "ScriptLocation": "s3://datalake-glue-scripts/carga_historica/carga_redis/carga_proposta_redis_ab_seguros_db_historico_old.scala",
+            "PythonVersion": "2"
+        },
+        "DefaultArguments": {
+            "--TempDir": "s3://aws-glue-temporary-909530209831-us-east-1/admin",
+            "--class": "GlueApp",
+            "--conf": "spark.driver.maxResultSize=10g",
+            "--enable-continuous-cloudwatch-log": "true",
+            "--executor_memory": "10g",
+            "--extra-files": "s3://datalake-glue-scripts/estrutura_query/proposta_ab_redshift_queries.json",
+            "--extra-jars": "s3://datalake-glue-scripts/dependencias_scala/combined_v10.jar",
+            "--job-bookmark-option": "job-bookmark-disable",
+            "--job-language": "scala",
+            "--query": "proposta_ab_redshift_queries.json",
+            "--redis_database": "12",
+            "--redis_host": "brasilseg-redis.gwdarl.0001.sae1.cache.amazonaws.com",
+            "--redis_port": "6379",
+            "--redshift_credentials": "prd/redshiftDW",
+            "--type": "incremental"
+        },
+        "Connections": {
+            "Connections": [
+                "dw_db"
+            ]
+        },
+        "MaxRetries": 0,
+        "AllocatedCapacity": 5,
+        "Timeout": 10000,
+        "MaxCapacity": 5.0,
+        "WorkerType": "G.2X",
+        "NumberOfWorkers": 2,
+        "GlueVersion": "1.0"
+    }
+}

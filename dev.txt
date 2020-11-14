@@ -1,0 +1,49 @@
+{
+    "Job": {
+        "Name": "asw_carga_redis_ab_seguros_db_incremental_propostas",
+        "Role": "arn:aws:iam::057872281239:role/Brasilseg-GlueRole",
+        "CreatedOn": 1596136737.298,
+        "LastModifiedOn": 1603996945.221,
+        "ExecutionProperty": {
+            "MaxConcurrentRuns": 1
+        },
+        "Command": {
+            "Name": "glueetl",
+            "ScriptLocation": "s3://datalake-glue-scripts-hml/carga_historica/carga_redis/asw_carga_unificada_redis_ab_seguros_db.scala",
+            "PythonVersion": "2"
+        },
+        "DefaultArguments": {
+            "--TempDir": "s3://aws-glue-temporary-533865883733-us-east-1/admin",
+            "--class": "GlueApp",
+            "--conf": "spark.driver.maxResultSize=10g",
+            "--enable-continuous-cloudwatch-log": "true",
+            "--enable-s3-parquet-optimized-committer ": "true",
+            "--enable-spark-ui": "true",
+            "--environment": "aws",
+            "--executor_memory": "10g",
+            "--extra-files": "s3://datalake-glue-scripts-hml/estrutura_query/proposta_ab_redshift_queries.json",
+            "--extra-jars": "s3://datalake-glue-scripts-hml/dependencias_scala/jedis-combined-1.0.jar",
+            "--job-bookmark-option": "job-bookmark-disable",
+            "--job-language": "scala",
+            "--query": "proposta_ab_redshift_queries.json",
+            "--redis_auth": "/brseg/elasticache/brasilseg-redis-aviso/token",
+            "--redis_database": "12",
+            "--redis_host": "/brseg/elasticache/brasilseg-redis-aviso/endpoint",
+            "--redis_port": "/brseg/elasticache/brasilseg-redis-aviso/porta",
+            "--redis_ssl": "true",
+            "--redshift_credentials": "hml/redshiftDW",
+            "--spark-event-logs-path": "s3://hml-brasilseg-glue-log/asw_carga_redis_ab_seguros_db_incremental_propostas/",
+            "--type": "incremental"
+        },
+        "Connections": {
+            "Connections": [
+                "redshift_dw"
+            ]
+        },
+        "MaxRetries": 0,
+        "AllocatedCapacity": 11,
+        "Timeout": 2880,
+        "MaxCapacity": 11.0,
+        "GlueVersion": "1.0"
+    }
+}

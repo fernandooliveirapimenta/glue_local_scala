@@ -1,6 +1,12 @@
-,'--enable-s3-parquet-optimized-committer':'true'
-,'GlueVersion': '2.0'
+
+,'--conf': 'spark.driver.memory=10g','--enable-s3-parquet-optimized-committer': 'true','--enable-spark-ui': 'true'
+
+'Command':{'PythonVersion':'3'},
+,'--executor-memory':'10g'
+
+,'--query':'sinistro_ab_redshift_queries.json'
 
 
+'--extra-files':'s3://datalake-glue-scripts/estrutura_query/carga_historico/sinistro_ab_redshift_queries.json'
 
-
+'--extra-files':'s3://datalake-glue-scripts/estrutura_query/sinistro_ab_redshift_queries.json'
