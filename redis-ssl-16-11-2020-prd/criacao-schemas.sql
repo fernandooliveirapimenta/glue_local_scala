@@ -12,26 +12,19 @@ create external schema spectrum_produto_ultron from data catalog database 'data_
 
 echo ("Criando as grants usage ...");
 
-grant usage on schema spectrum_apolice_ultron to group data_readers; 
-grant usage on schema spectrum_assistencia_ultron to group data_readers; 
-grant usage on schema spectrum_cliente_ultron to group data_readers; 
+grant usage on schema spectrum_assistencia_ultron to group data_readers;
+grant usage on schema spectrum_apolice_ultron to group data_readers;
+grant usage on schema spectrum_sinistro_ultron to group data_readers;
+grant usage on schema spectrum_cliente_ultron to group data_readers;
 grant usage on schema spectrum_produto_ultron to group data_readers; 
-grant usage on schema spectrum_sinistro_ultron to group data_readers; 
 
 echo ("Criando as grants select ...");
 
-grant select on all tables in schema spectrum_apolice_ultron to group data_readers; 
-grant select on all tables in schema spectrum_assistencia_ultron to group data_readers; 
-grant select on all tables in schema spectrum_cliente_ultron to group data_readers; 
+grant select on all tables in schema spectrum_assistencia_ultron to group data_readers;
+grant select on all tables in schema spectrum_apolice_ultron to group data_readers;
+grant select on all tables in schema spectrum_sinistro_ultron to group data_readers;
+grant select on all tables in schema spectrum_cliente_ultron to group data_readers;
 grant select on all tables in schema spectrum_produto_ultron to group data_readers; 
-grant select on all tables in schema spectrum_sinistro_ultron to group data_readers; 
 
-echo ("Criando as grants privileges ...");
-
-alter default privileges in schema spectrum_apolice_ultron grant select on tables to group data_readers; 
-alter default privileges in schema spectrum_assistencia_ultron grant select on tables to group data_reader; 
-alter default privileges in schema spectrum_cliente_ultron grant select on tables to group data_reader; 
-alter default privileges in schema spectrum_produto_ultron grant select on tables to group data_reader; 
-alter default privileges in schema spectrum_sinistro_ultron grant select on tables to group data_reader; 
 
 disconnect ();
