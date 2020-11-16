@@ -1,0 +1,34 @@
+
+aws glue delete-job --job-name asw_carga_redis_ab_seguros_db_historico_etl  --profile pessoal &&                    \
+aws glue delete-job --job-name asw_carga_redis_ab_seguros_db_incremental_async_proposta  --profile pessoal && \
+aws glue delete-job --job-name asw_carga_redis_ab_seguros_db_incremental_async_sinistro  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_assistencia_redis_ultron_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_assistencia_redis_ultron_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_evento_sinistro_redis_ultron_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_evento_sinistro_redis_ultron_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_home  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_preparacao  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_prestamista_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_prestamista_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_residencial_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_residencial_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_rural_ab_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_rural_ab_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_rural_abs_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_rural_abs_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_ultron_residencial_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_ultron_residencial_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_vida_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_proposta_redis_vida_incremental  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_sinistro_redis_ab_historico  --profile pessoal && \
+aws glue delete-job --job-name bb30_carga_sinistro_redis_ab_incremental  --profile pessoal && \
+aws glue delete-job --job-name carga_assistencia_redis_ab_mobile_assistencia_db  --profile pessoal && \
+aws glue delete-job --job-name carga_assistencia_redis_ab_mobile_assistencia_db_incremental  --profile pessoal && \
+aws glue delete-job --job-name carga_assistencia_redis_abs_mobile_assistencia_db  --profile pessoal && \
+aws glue delete-job --job-name carga_assistencia_redis_abs_mobile_assistencia_db_incremental  --profile pessoal && \
+aws glue delete-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db  --profile pessoal && \
+aws glue delete-job --job-name carga_evento_sinistro_redis_ab_mobile_seguros_db_incremental  --profile pessoal && \
+aws glue delete-job --job-name carga_evento_sinistro_redis_abs_mobile_seguros_db  --profile pessoal && \
+aws glue delete-job --job-name carga_evento_sinistro_redis_abs_mobile_seguros_db_incremental  --profile pessoal && \
+aws glue delete-job --job-name carga_sinistro_redis_abs_mobile_seguros_db  --profile pessoal && \
+aws glue delete-job --job-name carga_sinistro_redis_abs_mobile_seguros_db_incremental  --profile pessoal
