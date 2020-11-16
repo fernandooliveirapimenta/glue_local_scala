@@ -15,7 +15,7 @@ aws glue update-job \
   },
   "DefaultArguments": {
     "--job-language":"scala",
-    "--extra-jars": "s3://datalake-glue-cripts-hml/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-hml/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+    "--extra-jars": "s3://datalake-glue-scripts-hml/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-hml/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
     "--extra-files": "s3://datalake-glue-scripts-hml/estrutura_tabela/estrutura_assistencia_ultron.json,s3://datalake-glue-scripts-hml/estrutura_query/AssistenciaUltronQuerys.json",
     "--class":"GlueApp",
     "--TempDir": "s3://aws-glue-temporary-057872281239-us-east-1/admin",
@@ -65,7 +65,7 @@ aws glue update-job \
   },
   "DefaultArguments": {
     "--job-language":"scala",
-    "--extra-jars": "s3://datalake-glue-cripts-hml/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-hml/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
+    "--extra-jars": "s3://datalake-glue-scripts-hml/dependencias_scala/jedis-combined-1.0.jar,s3://datalake-glue-scripts-hml/dependencias_scala/Assistencia_ABS/entityDependencies.jar",
     "--extra-files": "s3://datalake-glue-scripts-hml/estrutura_tabela/estrutura_assistencia_ultron.json,s3://datalake-glue-scripts-hml/estrutura_query/AssistenciaUltronQuerys.json",
     "--class":"GlueApp",
     "--TempDir": "s3://aws-glue-temporary-057872281239-us-east-1/admin",
