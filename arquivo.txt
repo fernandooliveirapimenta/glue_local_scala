@@ -12,3 +12,16 @@
 '--extra-files':'s3://datalake-glue-scripts/estrutura_query/sinistro_ab_redshift_queries.json'
 
  '--extra-jars': 's3://datalake-glue-scripts/dependencias_scala/jedis-combined-1.0.jar',
+
+
+
+--type="full"
+--redis_host ="brasilseg-redis-cluster.gwdarl.ng.0001.sae1.cache.amazonaws.com"
+--filter="%CARGA_BB_3.0%
+--redis_db="2"
+--bucket_path="s3://brasilseg-segbr-extracao/ab_extracao_mobile_completa/assistencia_db"
+--redshift_credentials="prd/redshiftDW"
+--redshift_key_path="null"
+--conf="spark.driver.memory=10g"
+--redis_port="6379"
+--redshift_schema="spectrum_assistencia_db_ab_mobile"
